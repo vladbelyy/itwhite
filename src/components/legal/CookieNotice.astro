@@ -14,7 +14,7 @@ import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VERSION } from "../../lib/cookie-notic
 >
   <div>
     <strong>Cookies</strong>
-    <p>Используем cookies и Яндекс Метрику только после согласия. Поля форм не записываются Webvisor. <a href="/cookies/">Подробнее</a>.</p>
+    <p>Cookies и Яндекс Метрику включаем только после согласия. <a href="/cookies/">Подробнее</a>.</p>
   </div>
   <button type="button" data-cookie-notice-close>Понятно</button>
 </aside>
@@ -58,6 +58,7 @@ import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VERSION } from "../../lib/cookie-notic
   const hideNotice = () => {
     if (!notice) return;
     notice.hidden = true;
+    document.documentElement.dataset.cookieNoticeSeen = "true";
   };
 
   let noticeSeen = false;

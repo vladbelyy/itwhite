@@ -19,6 +19,12 @@ const homeDirections = [
   { code: "05", slug: "technical-consulting", title: "Технический консалтинг", text: "Проверяем архитектуру, код, инфраструктуру и риски до изменений." },
   { code: "06", slug: "custom-product-development", title: "Заказная разработка", text: "Проектируем продукт вокруг процесса, ролей и критериев приёмки." }
 ];
+const secondaryProducts = products.filter((product) => product.id !== "crm");
+const stageTitles: Record<string, string> = {
+  Diagnose: "Диагностика",
+  Launch: "Запуск",
+  Operate: "Сопровождение"
+};
 const canonicalServicePages = servicePages.filter((page) => !redirectedServiceSlugs.has(page.slug));
 const homeUrl = "https://itwhite.ru/";
 const websiteId = `${homeUrl}#website`;
@@ -241,191 +247,101 @@ const schema = {
 
       <section id="systems" class="section section--systems" data-status-section>
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>Product ecosystem</p>
-          <h2 class="section-title section-title--systems" data-reveal>Не презентации. Работающие системы.</h2>
-          <p class="section-copy" data-reveal>Системы ниже выросли из внутренних операционных задач. Публичный доступ зависит от контура: часть интерфейсов открыта, часть защищена авторизацией или работает без публичной демонстрационной страницы.</p>
-          <div class="system-passport" data-reveal>
-            <span>PRODUCT SYSTEMS / 03</span>
-            <b>03 INTERNAL CONTOURS</b>
-            <b>00 CONCEPTS</b>
-            <b>04 IN DEVELOPMENT</b>
-            <b>DEMO DATA MARKED</b>
-          </div>
-          <figure class="editorial-visual editorial-visual--control" data-reveal>
-            <img src="/images/editorial/control-layer-v1.webp" width="1440" height="960" loading="lazy" decoding="async" alt="Операционная панель контроля с физическими статусными модулями" />
-            <figcaption><span>CONTROL LAYER / OPERATING MODE</span><b>Система замечает событие, проверяет контекст и возвращает действие ответственному.</b></figcaption>
-          </figure>
-          <article class="flagship-control" data-reveal>
-            <div>
-              <span>FLAGSHIP CONTROL SYSTEM</span>
+          <header class="mobile-section-head">
+            <h2 class="section-title section-title--systems">Системы, которые уже решают операционные задачи.</h2>
+            <p>Показываем статус и границы доступа прямо. Подробные интерфейсы вынесены в продуктовый раздел, а здесь — только назначение и рабочая логика.</p>
+          </header>
+
+          <article class="flagship-brief">
+            <div class="flagship-brief__copy">
+              <span>Флагманский контур / Live private</span>
               <h3>IT WHITE Control</h3>
-              <p>Флагманский контур для контроля заявок, SLA, ответственных и возврата проблем в работу. Первый коммерческий сценарий — CRM Lead Control в Bitrix24.</p>
+              <p>Контроль заявок, SLA и ответственных. Первый рабочий сценарий — CRM Lead Control в Bitrix24.</p>
+              <a href="/it-white-control/">Открыть устройство системы <span aria-hidden="true">→</span></a>
             </div>
-            <div class="flagship-control__map" aria-label="Сценарий IT WHITE Control">
-              <b>LEAD</b>
-              <b>SLA</b>
-              <b>AI CONTEXT</b>
-              <b>BITRIX24</b>
-              <b>MANAGER ACTION</b>
-            </div>
-            <a href="/it-white-control/">Открыть IT WHITE Control →</a>
+            <ol class="flagship-route" aria-label="Логика IT WHITE Control">
+              <li><span>Событие</span><b>Лид поступил</b></li>
+              <li><span>Проверка</span><b>Ответ не зафиксирован</b></li>
+              <li><span>Контекст</span><b>Риск подтверждён</b></li>
+              <li><span>Действие</span><b>Лид возвращён в работу</b></li>
+            </ol>
           </article>
-          <div class="product-scenes">
-            {products.map((product) => (
-              <article class={`product-scene product-scene--${product.id}`} data-cursor="EXPLORE" data-reveal>
-                <div class="product-scene__meta">
-                  <span>ENDPOINT: {product.domain}</span>
-                  <b>{product.id === "crm" ? "FLAGSHIP / " : ""}STATUS: {product.status.toUpperCase()} / {product.type.toUpperCase()} / ILLUSTRATIVE DATA — NOT CLIENT METRICS</b>
-                </div>
-                <div class="product-scene__content">
-                  <div class="product-scene__copy">
-                    <h3>{product.name}</h3>
-                    <p>{product.summary}</p>
-                    <ul>{product.tasks.slice(0, 4).map((task) => <li>{task}</li>)}</ul>
-                  </div>
-                  <div class="product-preview" aria-label={`Интерфейс ${product.name}`}>
-                    {product.id === "avito" && (
-                      <>
-                        <div class="product-finding">
-                          <span>OBSERVED</span><b>Спрос обнаружен в 17 регионах</b>
-                          <span>GAP</span><b>Активное продвижение идёт в 6</b>
-                          <span>ACTION</span><b>Создать объявления в 11 регионах</b>
-                        </div>
-                        <div class="preview-table">
-                          {["Новосибирск", "Казань", "Екатеринбург", "Краснодар"].map((city, index) => (
-                            <div class={index === 1 ? "is-hot" : ""}>
-                              <span>{city}</span><b>{index === 1 ? "HIGH DEMAND" : "DEMAND"}</b><em>{17 - index * 3} signals</em>
-                            </div>
-                          ))}
-                        </div>
-                        {product.publicUrl ? <a class="product-link" href={product.publicUrl} target="_blank" rel="noreferrer">Открыть защищённый контур →</a> : <span class="product-link" aria-label="Публичная демонстрация закрыта">PUBLIC DEMO: CLOSED</span>}
-                      </>
-                    )}
-                    {product.id === "telegram" && (
-                      <>
-                        <div class="product-finding product-finding--compact">
-                          <span>04 ACCOUNTS</span><b>01 CONTROL PANEL</b>
-                          <span>00 LOST DIALOGUES</span><b>единая история действий</b>
-                        </div>
-                        <div class="telegram-flow">
-                          {["ACCOUNT 01", "ACCOUNT 02", "ACCOUNT 03", "ACCOUNT 04"].map((account) => <span>{account}</span>)}
-                          <b>UNIFIED INBOX</b>
-                        </div>
-                        <div class="feature-line"><span>распределение диалогов</span><span>контроль ответов</span><span>AI-классификация</span></div>
-                        {product.publicUrl ? <a class="product-link" href={product.publicUrl} target="_blank" rel="noreferrer">Открыть продукт →</a> : <span class="product-link">PUBLIC DEMO: CLOSED</span>}
-                      </>
-                    )}
-                    {product.id === "crm" && (
-                      <>
-                        <div class="lead-flow">
-                          {["01 Лид поступил", "02 Ответ не зафиксирован", "03 GigaChat анализирует контекст", "04 Риск пропуска подтверждён", "05 Уведомление отправлено"].map((step) => <span>{step}</span>)}
-                        </div>
-                        <div class="bot-alert">
-                          <span>⚠ LEAD CONTROL</span>
-                          <b>Источник: Авито</b>
-                          <b>Время без реакции: 27 минут</b>
-                          <b>Ответственный: не назначен</b>
-                          <em>Статус: требуется проверка</em>
-                        </div>
-                        {product.publicUrl ? <a class="product-link" href={product.publicUrl} target="_blank" rel="noreferrer">Открыть защищённый контур →</a> : <span class="product-link">PUBLIC DEMO: CLOSED</span>}
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div class="control-strip">
-                  <span>OWNER: SYSTEM</span>
-                  <span>ACTION: CONTROL</span>
-                  <span>STATUS: CONNECTED</span>
-                </div>
+
+          <div class="product-register" aria-label="Реестр внутренних систем IT WHITE">
+            {secondaryProducts.map((product, index) => (
+              <article>
+                <header>
+                  <span>{String(index + 2).padStart(2, "0")} / {product.type}</span>
+                  <em>{product.status}</em>
+                </header>
+                <h3>{product.name}</h3>
+                <p>{product.summary}</p>
+                <ul>{product.tasks.slice(0, 2).map((task) => <li>{task}</li>)}</ul>
+                {product.publicUrl
+                  ? <a href={product.publicUrl} target="_blank" rel="noreferrer">Открыть рабочий контур <span aria-hidden="true">↗</span></a>
+                  : <a href="/products/">Посмотреть описание <span aria-hidden="true">→</span></a>}
               </article>
             ))}
           </div>
-        </div>
-      </section>
 
-      <section class="section section--proof" data-status-section data-nav-current="systems">
-        <div class="section-inner">
-          <p class="section-kicker" data-reveal>Proof layer</p>
-          <h2 class="section-title section-title--proof" data-reveal>IT WHITE вырос из реальных операционных ограничений, а не из презентации про AI.</h2>
-          <div class="proof-grid">
-            <article data-reveal><span>VERIFIED WORK</span><b>INTERNAL PRODUCTION</b><p>CRM Lead Control работает в закрытом операционном контуре; границы и роль человека описаны в разделе внедрений</p></article>
-            <article data-reveal><span>PRODUCT CONTOURS</span><b>03</b><p>CRM Lead Control, Telegram Multiaccount и Avito Geo Demand с честной маркировкой публичного доступа</p></article>
-            <article data-reveal><span>CONTROL OBJECTS</span><b>CRM / ADS / AI / DATA</b><p>соединяем источники спроса, коммуникации, CRM и аналитику</p></article>
-            <article data-reveal><span>FIRST STAGE OUTPUT</span><b>PROCESS MAP</b><p>карта процесса, точки потерь, архитектура решения, предварительная экономика</p></article>
+          <div class="systems-proofline" aria-label="Границы доказательств">
+            <span><b>03</b> внутренних контура</span>
+            <span><b>Live / private</b> статус указан для каждого</span>
+            <span><b>Demo data</b> не выдаются за клиентские метрики</span>
           </div>
         </div>
       </section>
 
       <section class="section section--pricing" data-status-section data-nav-current="systems">
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>Formats / budget</p>
-          <h2 class="section-title section-title--pricing" data-reveal>Три входа в работу: Diagnose, Launch, Operate.</h2>
-          <p class="section-copy" data-reveal>Первый разговор помогает понять, есть ли задача для IT WHITE. Дальше работа не распадается на десятки услуг: мы либо диагностируем процесс, либо запускаем первый контур, либо сопровождаем систему после внедрения.</p>
-          <div class="entry-grid" data-reveal>
-            <article>
-              <span>PRIMARY REVIEW / INTRO</span>
-              <b>Контекст и следующий шаг</b>
-              <p>Проверяем, относится ли задача к компетенции IT WHITE. Полная карта процесса выполняется только в отдельной диагностике.</p>
-            </article>
-            <article>
-              <span>PAID DIAGNOSTIC</span>
-              <b>1–2 недели</b>
-              <p>Интервью, карта процесса, точки потерь, риски, архитектурные варианты и предварительная экономика.</p>
-            </article>
-          </div>
-          <div class="pricing-grid pricing-grid--commercial" data-reveal>
-            {commercialEntries.map(([title, price, text]) => (
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--pricing">Три этапа работы. Понятные границы бюджета.</h2>
+            <p>Первый разговор определяет контекст и следующий шаг. Полная карта процесса появляется в платной диагностике — до точной оценки разработки.</p>
+          </header>
+          <div class="work-stage-list">
+            {commercialEntries.map(([title, price, text], index) => (
               <article>
-                <span>{title}</span>
+                <header><span>{String(index + 1).padStart(2, "0")}</span><h3>{stageTitles[title]}</h3></header>
                 <b>{price}</b>
                 <p>{text}</p>
               </article>
             ))}
           </div>
-          <div class="pricing-note" data-reveal>
-            <span>RULE</span>
-            <b>Сначала карта процесса и границы решения. Только потом точная оценка разработки.</b>
-            <a href="/formats/">Подробные вилки и технические форматы →</a>
+          <div class="pricing-commitment" data-reveal>
+            <p><b>Правило оценки.</b> Сначала фиксируем процесс, ограничения и критерии результата. Только после этого считаем внедрение.</p>
+            <a href="/formats/">Все форматы и диапазоны <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </section>
 
       <section id="case" class="section section--case" data-status-section>
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>Verified internal work</p>
-          <h2 class="section-title section-title--case" data-reveal>Как контроль пропущенных лидов превратился в продукт.</h2>
-          <div class="case-intro" data-reveal>
-            <p>В CRM есть лид. Менеджер не ответил. Формально система работает — фактически клиент уже потерян.</p>
-            <p>Мы добавили второй уровень контроля: система анализирует состояние обращения и возвращает пропущенный лид в рабочий чат.</p>
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--case">Один рабочий кейс вместо обещаний.</h2>
+            <p>CRM Lead Control — внутренний production-контур, который проверяет лиды без ответственного или реакции и возвращает сигнал руководителю.</p>
+          </header>
+          <div class="case-brief">
+            <div class="case-brief__story" data-reveal>
+              <article><span>До</span><b>Лид есть в CRM, но его никто не ведёт.</b></article>
+              <article><span>Проверка</span><b>Система сверяет ответственного, реакцию и контекст.</b></article>
+              <article><span>После</span><b>Сигнал приходит в рабочий чат, решение остаётся за человеком.</b></article>
+            </div>
+            <article class="case-signal" data-reveal>
+              <span>Иллюстративный сигнал / не клиентская метрика</span>
+              <h3>Лид без реакции</h3>
+              <p><b>Источник</b><span>Bitrix24 / Avito</span></p>
+              <p><b>Риск</b><span>Ответственный не назначен</span></p>
+              <p><b>Действие</b><span>Проверка руководителя</span></p>
+            </article>
           </div>
-          <div class="case-context" data-reveal aria-label="Контекст внедрения CRM Lead Control">
-            <article><span>ENVIRONMENT</span><b>Bitrix24 / Avito / Telegram</b></article>
-            <article><span>IMPLEMENTATION</span><b>3 недели</b></article>
-            <article><span>STATUS</span><b>Internal production</b></article>
-            <article><span>CONTROL</span><b>лиды без ответственного и реакции</b></article>
-            <article><span>HUMAN DECISION</span><b>критические события проверяет руководитель</b></article>
+          <div class="case-facts" data-reveal>
+            <span><b>3 недели</b> внедрение</span>
+            <span><b>Internal production</b> статус</span>
+            <span><b>Human decision</b> критические действия</span>
           </div>
-          <div class="case-system" data-cursor="VIEW CASE">
-            <article class="case-lane">
-              <h3>До</h3>
-              {["Лид поступил", "Ответственный не назначен", "Лид не замечен"].map((item, index) => (
-                <span class={index === 1 ? "is-break" : ""}>{item}</span>
-              ))}
-            </article>
-            <article class="bot-message">
-              <span>SYSTEM</span>
-              <b>TIMER: 00:27:14</b>
-              <b>MESSAGE STATUS: NO RESPONSE</b>
-              <b>AI ANALYSIS: ATTENTION REQUIRED</b>
-              <p>CONTROL TYPE: AUTOMATIC<br />MANUAL CHECK: REQUIRED</p>
-            </article>
-            <article class="case-lane">
-              <h3>После</h3>
-              {["Уведомление отправлено", "Ответственный назначен", "Лид возвращён в работу"].map((item) => (
-                <span>{item}</span>
-              ))}
-              <a class="button" href="https://bot.itwhite.ru/admin" target="_blank" rel="noreferrer">Закрытая панель</a>
-            </article>
+          <div class="section-actions" data-reveal>
+            <a class="button button--primary" href="/work/">Смотреть внедрения</a>
+            <a class="text-link" href="/it-white-control/">Как устроен контроль <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </section>
@@ -434,142 +350,71 @@ const schema = {
 
       <section class="section section--case-library" data-status-section data-nav-current="case">
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>Implementation library / 50 scenarios</p>
-          <h2 class="section-title" data-reveal>Показываем не только что можно автоматизировать, но и где этого делать не стоит.</h2>
-          <p class="section-copy" data-reveal>Исследовательская библиотека по продажам, документам, поддержке, производству, ритейлу, логистике, IT и управлению. Каждый материал содержит процесс, архитектуру, KPI, human-in-the-loop и ограничения.</p>
-          <div class="home-case-grid">
-            {caseStudies.slice(0, 3).map((study) => (
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title">50 карт процессов — с ограничениями, а не только с идеями.</h2>
+            <p>Редакционные исследования, не клиентские кейсы. В каждой карте: процесс, архитектура, KPI, роль человека и границы автоматизации.</p>
+          </header>
+          <div class="case-index-list">
+            {caseStudies.slice(0, 3).map((study, index) => (
               <a href={`/cases/${study.slug}/`} data-reveal>
-                <span>{study.sector} / {study.area}</span>
-                <h3>{study.title}</h3>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div><small>{study.sector} / {study.area}</small><h3>{study.title}</h3></div>
                 <p>{study.problem}</p>
-                <b>Открыть карту →</b>
+                <b aria-hidden="true">→</b>
               </a>
             ))}
           </div>
-          <a class="button" href="/cases/">Смотреть все 50 сценариев</a>
+          <div class="section-actions"><a class="button" href="/cases/">Смотреть все 50 сценариев</a></div>
         </div>
       </section>
 
       <section id="method" class="section dark-section method-section" data-status-section>
         <div class="section-inner">
-          <div class="method-header">
-            <p class="section-kicker" data-reveal>Method</p>
-            <h2 class="section-title section-title--method" data-reveal>Разобраться. Запустить. Сопровождать.</h2>
-            <p class="section-copy" data-reveal>Внутри у нас есть подробная инженерная методология, но для клиента путь проще: найти потерю, запустить рабочий контур и развивать систему после внедрения.</p>
-          </div>
-          <div class="method-triad" data-reveal>
-            <article>
-              <img src="/images/editorial/method-diagnose-v1.webp" width="960" height="960" loading="lazy" decoding="async" alt="Разрозненные элементы процесса перед диагностикой" />
-              <span>01 / DIAGNOSE</span>
-              <b>Находим потерю</b>
-              <p>Интервью, карта процесса, роли, данные, ручные обходы, риски и предварительная экономика решения.</p>
-            </article>
-            <article>
-              <img src="/images/editorial/method-launch-v1.webp" width="960" height="960" loading="lazy" decoding="async" alt="Собранный рабочий механизм после проектирования и запуска" />
-              <span>02 / LAUNCH</span>
-              <b>Запускаем первый контур</b>
-              <p>Проектируем интерфейс, интеграции, контрольные события и запускаем сценарий работы команды в реальной среде.</p>
-            </article>
-            <article>
-              <img src="/images/editorial/method-operate-v1.webp" width="960" height="960" loading="lazy" decoding="async" alt="Стабильный операционный процесс с активным контролем" />
-              <span>03 / OPERATE</span>
-              <b>Доводим до привычки</b>
-              <p>Следим за работой системы, SLA, качеством данных, улучшениями и тем, как команда использует новый процесс.</p>
-            </article>
-          </div>
-          <div class="mobile-method-result" data-reveal>
-            <span>RESULT OF FIRST STAGE</span>
-            <b>Карта процесса</b><b>Точки потерь</b><b>Границы решения</b><b>Предварительная экономика</b>
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--method">Разобраться. Запустить. Сопровождать.</h2>
+            <p>Путь клиента — три понятных этапа. На каждом есть самостоятельный результат и точка решения о продолжении.</p>
+          </header>
+          <div class="method-path">
+            <article data-reveal><span>01 / Diagnose</span><h3>Находим потерю</h3><p>Интервью, карта процесса, роли, данные, ручные обходы, риски и предварительная экономика.</p><b>Карта / риски / экономика</b></article>
+            <article data-reveal><span>02 / Launch</span><h3>Запускаем первый контур</h3><p>Проектируем интерфейс, интеграции и контрольные события. Запускаем сценарий в реальной среде.</p><b>Контур / интеграции / критерии</b></article>
+            <article data-reveal><span>03 / Operate</span><h3>Доводим до привычки</h3><p>Следим за SLA, качеством данных и тем, как команда использует новый процесс.</p><b>SLA / качество / развитие</b></article>
           </div>
         </div>
       </section>
 
       <section id="team" class="section section--team" data-status-section>
-        <div class="section-inner team-layout">
-          <div>
-            <p class="section-kicker" data-reveal>Team / responsibility</p>
-            <h2 class="section-title section-title--team" data-reveal>У нас нет разрыва между продажей и разработкой.</h2>
-            <p class="section-copy" data-reveal>Проект не передаётся от продавца разработчику. Оба партнёра участвуют с первого разговора до внедрения: один отвечает за бизнес-результат, второй — за продукт и работу системы.</p>
-            <p class="section-copy" data-reveal>Подход IT WHITE вырос из реальной B2B-среды: отделы продаж, рекламные каналы, CRM, сервисные процессы, данные и тысячи входящих обращений.</p>
-            <figure class="editorial-visual editorial-visual--brand" data-reveal>
-              <img src="/images/editorial/editorial-w-v1.webp" width="1200" height="1200" loading="lazy" decoding="async" alt="Редакционный знак IT WHITE — буква W с сигнальным разрывом" />
-              <figcaption><span>ONE PROJECT / TWO OWNERS</span><b>Ответственность не передаётся по цепочке.</b></figcaption>
-            </figure>
-            <div class="hero__actions">
-              <a class="button button--primary" href="/contact/?service=process-review">Связаться с IT WHITE</a>
-              <a class="button" href="/contact/?service=process-review">Разобрать процесс</a>
-            </div>
-          </div>
-          <aside class="team-card agency-card" aria-label="Модель агентства">
-            <div class="partner-grid">
-            <article>
-              <img class="partner-portrait" src="/images/team/vladislav-bely-editorial-v1.webp" width="960" height="1200" loading="lazy" decoding="async" alt="Владислав Белый, Product & Engineering Partner IT WHITE" />
-              <span>01 / PRODUCT & ENGINEERING PARTNER</span>
-              <b>Владислав Белый</b>
-              <p>Отвечает за то, чтобы бизнес-логика стала работающей системой: от архитектуры и модели данных до интерфейсов, интеграций, AI и запуска.</p>
-              <small>Product strategy / System architecture / AI / Integrations / Engineering</small>
-              <em>PRODUCT / ENGINEERING / OPERATIONS</em>
-            </article>
-            <article>
-              <img class="partner-portrait" src="/images/team/denis-korablev-editorial-v1.webp" width="960" height="1200" loading="lazy" decoding="async" alt="Денис Кораблёв, Business & Delivery Partner IT WHITE" />
-              <span>02 / BUSINESS & DELIVERY PARTNER</span>
-              <b>Денис Кораблёв</b>
-              <p>Отвечает за то, чтобы решение было нужно бизнесу, имело понятную экономику и было внедрено в ежедневную работу команды.</p>
-              <small>Discovery / Commercial strategy / Stakeholder alignment / Delivery / Adoption</small>
-              <em>DISCOVERY / DELIVERY / ADOPTION</em>
-            </article>
-            </div>
-            <div class="ownership-line">
-              <span>ONE PROJECT. TWO OWNERS.</span>
-              <b>Бизнес-результат и техническое исполнение контролируются партнёрами от первого разговора до внедрения.</b>
-            </div>
-            <div class="metric"><b>ONE PROJECT</b><span>бизнес-логика, архитектура, внедрение и принятие решения остаются в одном контуре ответственности</span></div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section section--after" data-status-section data-nav-current="diagnostic">
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>After request</p>
-          <h2 class="section-title" data-reveal>Сначала разбираем процесс. Только потом оцениваем разработку.</h2>
-          <div class="after-request">
-            {[
-              ["01", "Входим в контекст бизнеса"],
-              ["02", "Находим точку потери"],
-              ["03", "Проверяем, нужна ли новая система"],
-              ["04", "Формируем границы решения"],
-              ["05", "Берём внедрение под контроль"]
-            ].map(([index, text]) => (
-              <div data-reveal><span>{index}</span><b>{text}</b></div>
-            ))}
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--team">Два партнёра. Отвечают вместе.</h2>
+            <p>Проект не передаётся от продавца разработчику: бизнес-логика и техническое исполнение остаются в одном контуре от первого разговора до внедрения.</p>
+          </header>
+          <div class="partner-list" aria-label="Партнёры IT WHITE">
+            <article data-reveal>
+              <img class="partner-portrait" src="/images/team/vladislav-bely-editorial-v1.webp" width="960" height="1200" loading="lazy" decoding="async" alt="Владислав Белый, Product & Engineering Partner IT WHITE" />
+              <div><span>Product & Engineering Partner</span><h3>Владислав Белый</h3>
+              <p>Отвечает за то, чтобы бизнес-логика стала работающей системой: от архитектуры и модели данных до интерфейсов, интеграций, AI и запуска.</p>
+              <small>Product strategy / Architecture / AI / Integrations</small></div>
+            </article>
+            <article data-reveal>
+              <img class="partner-portrait" src="/images/team/denis-korablev-editorial-v1.webp" width="960" height="1200" loading="lazy" decoding="async" alt="Денис Кораблёв, Business & Delivery Partner IT WHITE" />
+              <div><span>Business & Delivery Partner</span><h3>Денис Кораблёв</h3>
+              <p>Отвечает за то, чтобы решение было нужно бизнесу, имело понятную экономику и было внедрено в ежедневную работу команды.</p>
+              <small>Discovery / Strategy / Delivery / Adoption</small></div>
+            </article>
           </div>
-          <div class="first-stage-result" data-reveal>
-            <span>RESULT OF FIRST STAGE</span>
-            <b>Карта процесса</b>
-            <b>Точки потерь</b>
-            <b>Варианты решения</b>
-            <b>Предварительная экономика</b>
-          </div>
-          <div class="after-launch-result" data-reveal>
-            <span>AFTER LAUNCH</span>
-            <b>Monitoring</b>
-            <b>SLA</b>
-            <b>Improvements</b>
-            <b>Support</b>
-          </div>
-          <p class="section-copy">Мы не оцениваем разработку, пока не понимаем, какой процесс должен измениться и кто будет жить с этой системой каждый день.</p>
+          <div class="ownership-brief" data-reveal><span>One project / two owners</span><b>Архитектура, экономика, внедрение и принятие решения контролируются вместе.</b></div>
+          <div class="section-actions" data-reveal><a class="button button--primary" href="/contact/?service=process-review">Разобрать процесс с партнёрами</a><a class="text-link" href="/about/">О команде <span aria-hidden="true">→</span></a></div>
         </div>
       </section>
 
       <section id="diagnostic" class="section section--diagnostic" data-status-section>
         <div class="section-inner">
-          <p class="section-kicker" data-reveal>Self-check / separate tool</p>
-          <h2 class="section-title section-title--diagnostic" data-reveal>Не готовы к разговору? Проверьте процесс самостоятельно.</h2>
-          <p class="section-copy" data-reveal>Короткий инструмент отделён от формы заявки: семь вопросов показывают, где процесс зависит от ручного контроля, и не мешают тем, кто уже готов обсуждать проект.</p>
-          <div class="service-final-cta" data-reveal>
-            <span>PROCESS GAP CHECK / 3 MINUTES</span>
-            <b>Результат остаётся в браузере до тех пор, пока вы сами не отправите его вместе с обращением.</b>
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--diagnostic">Проверить процесс до разговора.</h2>
+            <p>Семь вопросов покажут, где работа зависит от ручного контроля. Результат остаётся в браузере, пока вы сами не приложите его к обращению.</p>
+          </header>
+          <div class="diagnostic-brief" data-reveal>
+            <div><span>7 вопросов / около 3 минут</span><b>Самопроверка без регистрации и автоматической отправки данных.</b></div>
             <a class="button button--primary" href="/tools/process-gap-check/">Пройти проверку процесса</a>
           </div>
         </div>
@@ -578,17 +423,16 @@ const schema = {
       <section id="contact" class="section dark-section section--contact" data-status-section>
         <div class="section-inner">
           <div class="contact-intro">
-            <p class="section-kicker" data-reveal>Contact</p>
-            <h2 class="section-title section-title--contact" data-reveal>Покажите процесс, который тормозит бизнес.</h2>
-            <p class="section-copy" data-reveal>Коммерческая и техническая стороны вместе разберут задачу: где находится потеря, какое решение возможно, что нужно изменить в процессе и где разработка действительно даст эффект.</p>
-            <div class="request-spec" data-reveal>
-              <span>CREATE PROJECT REQUEST</span>
-              <b>01 Какой процесс тормозит бизнес?</b>
-              <b>02 Где появляются потери?</b>
-              <b>03 Какие системы уже используются?</b>
-              <b>04 Что должно работать быстрее, понятнее и надёжнее?</b>
+            <header class="mobile-section-head" data-reveal>
+              <h2 class="section-title section-title--contact">Начнём с процесса. Не с ТЗ.</h2>
+              <p>Коммерческая и техническая стороны вместе разберут потерю, ограничения и первый разумный шаг.</p>
+            </header>
+            <div class="contact-prompts" data-reveal>
+              <p><span>01</span><b>Где процесс теряет контроль?</b></p>
+              <p><span>02</span><b>Какие системы уже используются?</b></p>
+              <p><span>03</span><b>Что должно измениться?</b></p>
             </div>
-            <p class="section-copy contact-channels"><a class="button" href={telegramUrl} target="_blank" rel="noreferrer">Обсудить проект в Telegram</a><a class="button" href="mailto:info@itwhite.ru">info@itwhite.ru</a></p>
+            <div class="contact-channels"><a class="button" href={telegramUrl} target="_blank" rel="noreferrer">Telegram</a><a class="button" href="mailto:info@itwhite.ru">info@itwhite.ru</a></div>
           </div>
           <div class="contact-shell">
             <ProjectForm client:visible />
@@ -616,20 +460,10 @@ const schema = {
           <span>Services</span>
           <a href="/it-white-control/">IT WHITE Control</a>
           <a href="/business-process-audit/">Аудит процессов</a>
+          <a href="/technical-consulting/">Технический консалтинг</a>
           <a href="/crm-automation/">CRM-автоматизация</a>
           <a href="/ai-automation/">AI-автоматизация</a>
           <a href="/custom-product-development/">Продуктовая разработка</a>
-        </nav>
-        <nav class="site-footer__nav" aria-label="Продукты и форматы">
-          <span>Index</span>
-          <a href="/formats/">Форматы и бюджет</a>
-          <a href="/internal-tools/">Внутренние панели</a>
-          <a href="/seo-support/">Спрос и атрибуция</a>
-          <a href="/bitrix24-automation/">Bitrix24</a>
-          <a href="/avito-analytics/">Авито-аналитика</a>
-          <a href="/cases/">50 исследовательских сценариев</a>
-          <a href="/tools/process-gap-check/">Проверка процесса</a>
-          <a href="/llms.txt">llms.txt</a>
         </nav>
         <div class="site-footer__contact">
           <span>Contact</span>

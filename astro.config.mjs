@@ -22,7 +22,7 @@ export default defineConfig({
     mode: "standalone"
   }),
   build: {
-    inlineStylesheets: "always"
+    inlineStylesheets: "never"
   },
   integrations: [react()]
 });

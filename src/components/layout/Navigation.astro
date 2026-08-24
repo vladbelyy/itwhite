@@ -188,8 +188,14 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   document.querySelectorAll<HTMLDetailsElement>(".mobile-menu").forEach((menu) => {
     const trigger = menu.querySelector<HTMLElement>(":scope > summary");
     const drawer = menu.querySelector<HTMLElement>(":scope > nav");
+    const backgroundRegions = Array.from(document.querySelectorAll<HTMLElement>("main, footer, .status-bar, .cookie-notice"));
     const syncMenuState = () => {
       document.documentElement.classList.toggle("mobile-menu-open", menu.open);
+      backgroundRegions.forEach((region) => {
+        region.inert = menu.open;
+        if (menu.open) region.setAttribute("aria-hidden", "true");
+        else region.removeAttribute("aria-hidden");
+      });
       if (!menu.open) return;
       drawer?.querySelector<HTMLElement>("a, summary")?.focus();
     };
@@ -361,7 +367,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .mobile-menu a[aria-current="page"] {
-    color: var(--signal);
+    color: var(--signal-on-dark);
     font-weight: 700;
   }
 
