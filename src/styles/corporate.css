@@ -24,7 +24,7 @@
   gap: 8px 18px;
   margin-bottom: clamp(46px, 8vw, 112px);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--type-label);
   text-transform: uppercase;
 }
 
@@ -59,7 +59,7 @@
   margin: 0 0 16px;
   color: var(--signal);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--type-label);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -142,6 +142,16 @@
   line-height: 1.45;
 }
 
+.corporate-section__head > .corporate-label {
+  color: var(--signal);
+  font-size: var(--type-label);
+  line-height: 1.45;
+}
+
+.corporate-section--dark .corporate-section__head > .corporate-label {
+  color: var(--signal-on-dark);
+}
+
 .corporate-section--dark .corporate-section__head p {
   color: rgba(242, 241, 236, 0.62);
 }
@@ -161,9 +171,9 @@
 .registry-card__code,
 .evidence-state {
   align-self: start;
-  color: var(--signal);
+  color: var(--direction-accent, var(--signal));
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--type-label);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -198,7 +208,7 @@
   max-width: 760px;
   margin: 0;
   color: var(--muted);
-  font-size: clamp(16px, 1.2vw, 20px);
+  font-size: var(--type-body);
   line-height: 1.45;
 }
 
@@ -216,6 +226,7 @@
   position: relative;
   padding-left: 20px;
   color: var(--ink);
+  font-size: var(--type-body);
   line-height: 1.4;
 }
 
@@ -251,7 +262,7 @@
   padding: 8px 12px;
   border: 1px solid var(--line);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -372,6 +383,53 @@
   color: white;
 }
 
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--dark-line);
+  background: var(--dark-line);
+}
+
+.support-card {
+  min-height: 330px;
+  display: grid;
+  align-content: space-between;
+  gap: 24px;
+  padding: clamp(22px, 3vw, 38px);
+  background: var(--registry-dark);
+  transition: background-color 180ms ease;
+}
+
+.support-card:hover {
+  background: #22252a;
+}
+
+.support-card span,
+.support-card b,
+.corporate-section--dark .corporate-label {
+  color: var(--signal-on-dark);
+  font-family: var(--mono);
+  font-size: var(--type-label);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.support-card h3 {
+  margin: 24px 0 0;
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 60px);
+  line-height: 0.98;
+}
+
+.support-card p {
+  max-width: 660px;
+  margin: 0;
+  color: rgba(242, 241, 236, 0.72);
+  font-size: var(--type-body);
+  line-height: 1.5;
+}
+
 @media (max-width: 900px) {
   .corporate-frame {
     padding-left: 0;
@@ -394,7 +452,8 @@
 
   .evidence-grid,
   .sector-grid,
-  .profile-grid {
+  .profile-grid,
+  .support-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -406,7 +465,7 @@
 
   .corporate-hero h1 {
     font-size: clamp(38px, 11vw, 46px);
-    line-height: 0.9;
+    line-height: 0.94;
   }
 
   .profile-card {

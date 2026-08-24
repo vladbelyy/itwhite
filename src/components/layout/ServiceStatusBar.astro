@@ -1,0 +1,32 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  direction?: string;
+}
+
+const { slug, title, direction = "SERVICE / CONTROL" } = Astro.props;
+const corporateLinks = [
+  { label: "Решения", href: "/solutions/" },
+  { label: "Продукты", href: "/products/" },
+  { label: "Внедрения", href: "/work/" },
+  { label: "Материалы", href: "/insights/" },
+  { label: "Команда", href: "/about/" }
+];
+---
+
+<nav class="status-bar status-bar--static" aria-label="Быстрая навигация">
+  <a class="status-bar__brand" href="/#top" aria-label="IT WHITE: на главную">
+    <span class="status-bar__signal" aria-hidden="true"></span><span>IT WHITE</span>
+  </a>
+  <div class="status-bar__cluster status-bar__cluster--sections" aria-label="Разделы сайта">
+    {corporateLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+  </div>
+  <div class="status-bar__state">
+    <span>{direction}</span>
+    <b title={title}>CONTROL LOOP / READY</b>
+  </div>
+  <a class="status-bar__cta" href={`/contact/?service=${slug}`}>
+    <span class="status-bar__full">Разобрать процесс</span><span class="status-bar__short">Заявка</span>
+  </a>
+</nav>

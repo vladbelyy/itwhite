@@ -23,7 +23,7 @@ export const staticSitemapPages: SitemapPage[] = [
 ];
 
 // Service pages are maintained as one content collection in servicePages.ts.
-export const servicePagesLastmod = "2026-08-14";
+export const servicePagesLastmod = "2026-08-24";
 
 // These routes remain buildable for backward compatibility but permanently
 // redirect to the canonical commercial pages and must not enter the sitemap.

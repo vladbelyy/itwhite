@@ -1,10 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CorporateHub from "../../components/corporate/CorporateHub.astro";
-import { solutionGroups } from "../../data/corporate";
+import { solutionGroups, supportingCapabilities } from "../../data/corporate";
+import { directionProfiles } from "../../data/directions";
 
 const title = "Решения для контроля бизнес-процессов — IT WHITE";
-const description = "CRM-контроль, внутренние системы, AI в операциях, интеграции и атрибуция спроса: направления IT WHITE с понятными границами и результатом.";
+const description = "Автоматизация процессов, CRM и Bitrix24, внутренние системы и контролируемый AI: четыре направления IT WHITE с понятными границами и критериями готовности.";
 const canonical = "https://itwhite.ru/solutions/";
 const schema = {
   "@context": "https://schema.org",
@@ -44,22 +45,22 @@ const schema = {
   <CorporateHub
     current="/solutions/"
     eyebrow="Solutions registry / business control"
-    title="Не набор технологий. Пять контуров, где бизнес теряет управление."
-    lead="Выбираем направление по наблюдаемому сбою: потерянному действию, разрыву данных, ручному решению или отсутствию измеримого источника."
+    title="Четыре направления. Один принцип: процесс должен оставаться управляемым."
+    lead="Выбираем решение по наблюдаемому сбою: ручной передаче, потерянному действию, разрыву рабочего интерфейса или контексту, который нельзя надёжно обработать правилом."
     status="Service scope / no guaranteed outcome"
   >
     <section class="corporate-section">
       <div class="corporate-frame">
         <header class="corporate-section__head">
-          <p class="corporate-label">OPERATING AREAS / 05</p>
+          <p class="corporate-label">CORE DIRECTIONS / 04</p>
           <div>
             <h2>Сначала фиксируем потерю. Затем выбираем систему.</h2>
             <p>Каждое направление описывает рабочий контур, состав результата и границу ответственности. Технология не подменяет владельца процесса.</p>
           </div>
         </header>
         <div class="registry">
-          {solutionGroups.map((item) => (
-            <article class="registry-card">
+          {solutionGroups.map((item, index) => (
+            <article class="registry-card" style={`--direction-accent: ${directionProfiles[index]?.accent ?? "#a93200"}`}>
               <span class="registry-card__code">{item.code}</span>
               <h2><a href={item.href}>{item.title}</a></h2>
               <div class="registry-card__body">
@@ -69,6 +70,21 @@ const schema = {
                 <div class="related-links">{item.related.map((link) => <a href={link.href}>{link.label}</a>)}</div>
               </div>
             </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--dark">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">CROSS-CUTTING / 02</p>
+          <div><h2>Слои, без которых направление не выходит в эксплуатацию.</h2><p>Интеграции, безопасность, данные и измеримость не продаются как украшение. Они определяют, можно ли доверять рабочему контуру после первого успешного сценария.</p></div>
+        </header>
+        <div class="support-grid">
+          {supportingCapabilities.map((item) => (
+            <a class="support-card" href={item.href}>
+              <span>{item.code}</span><h3>{item.title}</h3><p>{item.summary}</p><b>Открыть контур →</b>
+            </a>
           ))}
         </div>
       </div>

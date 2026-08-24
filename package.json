@@ -8,6 +8,7 @@
     "build": "panda codegen && astro check && astro build",
     "generate:case-art": "node scripts/generate-case-visuals.mjs",
     "audit:cases": "node scripts/audit-case-library.mjs",
+    "audit:design": "node scripts/audit-design-system.mjs",
     "test:critical": "node scripts/test-critical-flows.mjs",
     "preview": "astro preview --host 0.0.0.0",
     "check": "panda codegen && astro check"

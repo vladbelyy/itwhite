@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Navigation from "../components/layout/Navigation.astro";
-import StatusBar from "../components/layout/StatusBar";
-import { SystemLayer } from "../components/interactive/SystemLayer";
+import ServiceStatusBar from "../components/layout/ServiceStatusBar.astro";
 import { servicePages, getServiceUrl } from "../data/servicePages";
 import { serviceDepth } from "../data/serviceDepth";
+import { getDirectionProfile } from "../data/directions";
 import { caseStudies } from "../data/caseStudies";
 import { redirectedServiceSlugs } from "../lib/sitemap-governance";
 import LegalLinks from "../components/legal/LegalLinks.astro";
@@ -27,6 +27,7 @@ const sectorMap: Record<string, string[]> = {
   "it-white-control": ["Продажи и CRM", "Поддержка и сервис"],
   "ai-automation": ["Поддержка и сервис", "Финансы и документы", "IT и безопасность"],
   "business-process-audit": ["Маркетинг и управление"],
+  "process-automation": ["Маркетинг и управление", "IT и безопасность"],
   "formats": ["Маркетинг и управление"],
   "custom-product-development": ["IT и безопасность", "Маркетинг и управление"],
   "bitrix24-automation": ["Продажи и CRM"],
@@ -41,6 +42,7 @@ const sectorMap: Record<string, string[]> = {
 };
 const relatedScenarios = caseStudies.filter((item) => (sectorMap[page.slug] ?? []).includes(item.sector)).slice(0, 3);
 const depth = serviceDepth[page.slug];
+const direction = getDirectionProfile(page.slug);
 
 const schema = {
   "@context": "https://schema.org",
@@ -98,10 +100,9 @@ const schema = {
 
 <BaseLayout title={title} description={description}>
   <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <div class="page-shell">
+  <div class:list={["page-shell", { "service-direction": direction }]} style={direction ? `--direction-accent: ${direction.accent}` : undefined}>
     <Navigation />
-    <SystemLayer client:idle />
-    <StatusBar client:idle />
+    <ServiceStatusBar slug={page.slug} title={page.title} direction={direction?.code} />
     <main id="top" tabindex="-1">
       <section class="section service-hero" data-status-section>
         <div class="section-inner">
@@ -113,6 +114,11 @@ const schema = {
             <span>FOR</span><b>{page.audience}</b>
             <span>RESULT</span><b>{page.result}</b>
           </div>
+          {direction && (
+            <div class="control-loop" data-reveal aria-label={`Контур управления: ${direction.shortLabel}`}>
+              {direction.controlLoop.map((item) => <div><span>{item.label}</span><b>{item.value}</b></div>)}
+            </div>
+          )}
           <div class="hero__actions">
             <a class="button button--primary" href={`/contact/?service=${page.slug}`}>Разобрать процесс</a>
             <a class="button" href="/solutions/">Все решения</a>
@@ -215,5 +221,26 @@ const schema = {
       <LegalLinks />
       <a href={`/contact/?service=${page.slug}`}>Обсудить проект</a>
     </footer>
+    <script is:inline>
+      (() => {
+        const items = Array.from(document.querySelectorAll("[data-reveal]"));
+        if (!items.length) return;
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+          items.forEach((item) => item.classList.add("is-visible"));
+          return;
+        }
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+        items.forEach((item, index) => {
+          item.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 30}ms`);
+          observer.observe(item);
+        });
+      })();
+    </script>
   </div>
 </BaseLayout>

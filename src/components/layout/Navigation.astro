@@ -12,9 +12,10 @@ interface Props {
 const { theme = "light" } = Astro.props;
 
 const solutionLinks = [
-  { href: "/lost-leads/", label: "Теряются заявки" },
-  { href: "/ai-automation/", label: "AI в операциях" },
-  { href: "/internal-tools/", label: "Внутренняя система" }
+  { href: "/process-automation/", label: "Автоматизация процессов" },
+  { href: "/crm-automation/", label: "CRM и Bitrix24" },
+  { href: "/internal-tools/", label: "Внутренние системы" },
+  { href: "/ai-automation/", label: "Контролируемый AI" }
 ];
 
 const productLinks = [
@@ -30,7 +31,7 @@ const contextualServiceSlugs = new Set([
   "lost-leads", "ai-in-operations", "internal-business-system", "it-white-control",
   "avito-analytics", "bitrix24-automation", "crm-automation", "ai-automation",
   "business-process-audit", "custom-product-development", "internal-tools",
-  "seo-support", "security-data", "diagnose", "formats"
+  "process-automation", "seo-support", "security-data", "diagnose", "formats"
 ]);
 const currentSlug = currentPath.split("/").filter(Boolean).at(-1) || "";
 const contactService = contextualServiceSlugs.has(currentSlug) ? currentSlug : "process-review";
@@ -122,7 +123,8 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
     "avito-analytics": "Аналитика Авито",
     "bitrix24-automation": "Интеграции Bitrix24",
     "crm-automation": "CRM-автоматизация и контроль лидов",
-    "ai-automation": "AI-автоматизация бизнес-процессов",
+    "ai-automation": "AI под контролем в бизнес-процессах",
+    "process-automation": "Автоматизация бизнес-процессов",
     "business-process-audit": "Аудит бизнес-процессов",
     "custom-product-development": "Разработка продуктов под бизнес-задачу",
     "internal-tools": "Внутренние системы и панели",
