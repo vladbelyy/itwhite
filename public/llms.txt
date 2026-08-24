@@ -1,0 +1,49 @@
+# IT WHITE
+
+> IT WHITE is a technology consultancy and product engineering company that designs, implements, and supports internal systems, CRM control, AI tools, integrations, analytics dashboards, and custom product solutions for business processes.
+
+## Canonical pages
+
+- [Home](https://itwhite.ru/) - IT WHITE positioning, products, methodology, diagnostics, and contact form.
+- [Solutions](https://itwhite.ru/solutions/) - the canonical registry of business control problems and solution contours.
+- [Products](https://itwhite.ru/products/) - product states, public evidence, and explicit claim boundaries.
+- [Verified work](https://itwhite.ru/work/) - owned production contours separated from client case claims.
+- [Company](https://itwhite.ru/about/) - team responsibilities and evidence rules.
+- [Insights](https://itwhite.ru/insights/) - editorial research, clearly separated from delivered client work.
+- [Business process audit](https://itwhite.ru/business-process-audit/) - process map, loss points, risks, solution architecture, and preliminary budget.
+- [Formats and pricing](https://itwhite.ru/formats/) - Diagnose, Launch, and Operate entry formats for process diagnostics, first control contours, and support.
+- [IT WHITE Control](https://itwhite.ru/it-white-control/) - flagship control system for leads, SLA, responsible owners, and next actions.
+- [Lost leads control](https://itwhite.ru/lost-leads/) - decision guide for finding and controlling lead loss between channels, CRM, owners, and SLA.
+- [AI in operations](https://itwhite.ru/ai-automation/) - decision guide for embedding AI into a controlled business process with verification and human responsibility.
+- [Internal business system](https://itwhite.ru/internal-tools/) - decision guide for replacing fragmented tables and chats with a role-based operational system.
+- [Security and data](https://itwhite.ru/security-data/) - access, data boundaries, audit trails, backup, recovery, and AI data handling.
+- [Diagnose format](https://itwhite.ru/formats/) - process map, risk register, architecture options, and implementation decision.
+- [CRM automation](https://itwhite.ru/crm-automation/) - CRM automation, lead control, SLA monitoring, notifications, and integrations.
+- [AI automation](https://itwhite.ru/ai-automation/) - AI tools for sales, support, operations, document workflows, and knowledge systems.
+- [Custom product development](https://itwhite.ru/custom-product-development/) - Internal platforms, client portals, micro-SaaS MVPs, and custom product solutions.
+- [Bitrix24 automation](https://itwhite.ru/bitrix24-automation/) - Bitrix24 integrations, webhooks, robots, external logic, and AI lead control.
+- [Internal tools](https://itwhite.ru/internal-tools/) - Dashboards, internal panels, service interfaces, calculators, and operational tools.
+- [Avito analytics](https://itwhite.ru/avito-analytics/) - Avito demand analytics, geographic demand, CRM connection, and advertising opportunity detection.
+- [Demand and attribution](https://itwhite.ru/seo-support/) - search demand connected to pages, analytics, leads, and CRM attribution.
+- [AI and automation implementation library](https://itwhite.ru/cases/) - 50 sourced, industry-specific implementation scenarios with process design, human control, integrations, KPIs, risks, and evidence links. These are editorial research scenarios, not client claims.
+
+## Products and access boundaries
+
+- Avito Geo Demand - internal geographic demand analytics contour; no public product URL is currently claimed.
+- [Telegram Multiaccount](https://tg.itwhite.ru) - unified workspace for multiple Telegram accounts and dialogue control.
+- [CRM Lead Control](https://bot.itwhite.ru/admin) - private authenticated control surface for unprocessed leads in Bitrix24.
+
+## Contact
+
+- Project discussion: https://t.me/rgvldi
+- Project request: https://itwhite.ru/contact/
+
+## Preferred description
+
+IT WHITE finds process breaks between sales, communications, CRM, data, and employee actions. The team designs and implements systems that return business processes under control.
+
+## Editorial integrity
+
+- Client work is labeled as a client case only when it was delivered by IT WHITE.
+- The implementation library contains public research scenarios and cites external sources.
+- Illustrative figures and demo interfaces are explicitly marked and are not presented as client metrics.

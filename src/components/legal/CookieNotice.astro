@@ -1,0 +1,75 @@
+---
+import "./CookieNotice.css";
+import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VERSION } from "../../lib/cookie-notice";
+---
+
+<aside
+  id="cookie-notice"
+  class="cookie-notice"
+  data-cookie-notice
+  data-notice-key={COOKIE_NOTICE_KEY}
+  data-notice-version={COOKIE_NOTICE_VERSION}
+  aria-label="Уведомление о cookies"
+  aria-live="polite"
+>
+  <div>
+    <strong>Cookies</strong>
+    <p>Сайт использует cookies и Яндекс Метрику для анализа работы и улучшения интерфейса. Метрика запустится после нажатия «Понятно» в соответствии с <a href="/cookies/">политикой cookies</a>. Поля формы не записываются Webvisor.</p>
+  </div>
+  <button type="button" data-cookie-notice-close>Понятно</button>
+</aside>
+
+<noscript><div><img src="https://mc.yandex.ru/watch/111614138" style="position:absolute; left:-9999px" alt="" /></div></noscript>
+
+<script>
+  const counterId = 111614138;
+  const metrikaWindow = window as typeof window & { ym?: CallableFunction; dataLayer?: unknown[]; __itwhiteMetrikaLoaded?: boolean };
+
+  const loadMetrika = () => {
+    if (metrikaWindow.__itwhiteMetrikaLoaded) return;
+    metrikaWindow.__itwhiteMetrikaLoaded = true;
+    metrikaWindow.dataLayer = metrikaWindow.dataLayer || [];
+    metrikaWindow.ym = metrikaWindow.ym || function (...args: unknown[]) {
+      const fn = metrikaWindow.ym as CallableFunction & { a?: unknown[][] };
+      (fn.a = fn.a || []).push(args);
+    };
+    (metrikaWindow.ym as CallableFunction & { l?: number }).l = Date.now();
+    if (!document.querySelector(`script[src*="mc.yandex.ru/metrika/tag.js?id=${counterId}"]`)) {
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = `https://mc.yandex.ru/metrika/tag.js?id=${counterId}`;
+      document.head.appendChild(script);
+    }
+    metrikaWindow.ym(counterId, "init", {
+      ssr: true,
+      webvisor: true,
+      clickmap: true,
+      ecommerce: "dataLayer",
+      referrer: document.referrer,
+      url: location.href,
+      accurateTrackBounce: true,
+      trackLinks: true
+    });
+  };
+
+  const notice = document.querySelector<HTMLElement>("[data-cookie-notice]");
+  const noticeKey = notice?.dataset.noticeKey || "itwhiteCookieNotice";
+  const noticeVersion = notice?.dataset.noticeVersion || "2026-08-14-metrika-2";
+  const hideNotice = () => {
+    if (!notice) return;
+    notice.hidden = true;
+  };
+
+  let noticeSeen = false;
+  try { noticeSeen = localStorage.getItem(noticeKey) === noticeVersion; } catch {}
+  if (noticeSeen && notice) {
+    notice.hidden = true;
+    loadMetrika();
+  }
+
+  notice?.querySelector("[data-cookie-notice-close]")?.addEventListener("click", () => {
+    try { localStorage.setItem(noticeKey, noticeVersion); } catch {}
+    loadMetrika();
+    hideNotice();
+  });
+</script>

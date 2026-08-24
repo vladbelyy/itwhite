@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navigation from "../components/layout/Navigation.astro";
+import ProjectForm from "../components/forms/ProjectForm";
+import LegalLinks from "../components/legal/LegalLinks.astro";
+
+const title = "Обсудить бизнес-процесс — IT WHITE";
+const description = "Первичный разбор бизнес-процесса с IT WHITE: контекст задачи, точка потери и следующий разумный шаг без предварительной оценки разработки вслепую.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Обсудить бизнес-процесс с IT WHITE",
+  description,
+  url: "https://itwhite.ru/contact/",
+  about: { "@id": "https://itwhite.ru/#organization" }
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="page-shell">
+    <Navigation theme="dark" />
+    <main id="top" tabindex="-1">
+      <section class="section dark-section section--contact" aria-labelledby="contact-title">
+        <div class="section-inner">
+          <div class="contact-intro">
+            <p class="section-kicker">Contact / primary review</p>
+            <h1 id="contact-title" class="section-title section-title--contact">Покажите процесс, который тормозит бизнес.</h1>
+            <p class="section-copy">Коммерческая и техническая стороны вместе разберут задачу: где находится потеря, какое решение возможно и нужен ли для него новый контур.</p>
+            <div class="request-spec" aria-label="Что произойдёт после заявки">
+              <span>NEXT STEP</span>
+              <b>Первичный разговор / квалификация задачи</b>
+              <p>Уточняем контекст, существующие системы и следующий разумный шаг. Полная карта процесса выполняется только в отдельной диагностике.</p>
+            </div>
+            <p class="section-copy contact-channels">
+              <a class="button" href="https://t.me/rgvldi" target="_blank" rel="noreferrer">Обсудить в Telegram</a>
+              <a class="button" href="mailto:info@itwhite.ru">info@itwhite.ru</a>
+            </p>
+          </div>
+          <div class="contact-shell">
+            <ProjectForm client:load />
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="service-legal" aria-label="Реквизиты IT WHITE">
+      <span>© 2026 IT WHITE</span>
+      <span>ИП Белый В.М. / ИНН 772333809099 / ОГРНИП 323774600178142</span>
+      <LegalLinks />
+      <a href="/">На главную</a>
+    </footer>
+  </div>
+</BaseLayout>

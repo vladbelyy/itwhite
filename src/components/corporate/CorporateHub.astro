@@ -1,0 +1,51 @@
+---
+import Navigation from "../layout/Navigation.astro";
+import LegalLinks from "../legal/LegalLinks.astro";
+import { corporateSections } from "../../data/corporate";
+import "../../styles/corporate.css";
+
+interface Props {
+  current: (typeof corporateSections)[number]["href"];
+  eyebrow: string;
+  title: string;
+  lead: string;
+  status: string;
+}
+
+const { current, eyebrow, title, lead, status } = Astro.props;
+---
+
+<div class="page-shell corporate-shell">
+  <Navigation />
+  <main id="top" class="corporate-main" tabindex="-1">
+    <section class="corporate-hero">
+      <div class="corporate-frame">
+        <nav class="corporate-breadcrumbs" aria-label="Разделы корпоративного сайта">
+          <a href="/">IT WHITE</a>
+          {corporateSections.map((item) => (
+            <a href={item.href} aria-current={item.href === current ? "page" : undefined}>{item.label}</a>
+          ))}
+        </nav>
+        <div class="corporate-hero__grid">
+          <div>
+            <p class="corporate-kicker">{eyebrow}</p>
+            <h1>{title}</h1>
+            <p class="corporate-lead">{lead}</p>
+          </div>
+          <aside class="corporate-state" aria-label="Статус раздела">
+            <span>CONTENT STATE</span>
+            <b>{status}</b>
+            <small>FACTS / BOUNDARIES / NEXT ACTION</small>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <slot />
+  </main>
+  <footer class="service-legal" aria-label="Реквизиты IT WHITE">
+    <span>© 2026 IT WHITE</span>
+    <span>ИП Белый В.М. / ИНН 772333809099 / ОГРНИП 323774600178142</span>
+    <LegalLinks />
+    <a href="/contact/?service=process-review">Обсудить процесс</a>
+  </footer>
+</div>

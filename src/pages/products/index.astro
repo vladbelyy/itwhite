@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CorporateHub from "../../components/corporate/CorporateHub.astro";
+import { productRegistry } from "../../data/corporate";
+
+const title = "Продукты и рабочие системы IT WHITE";
+const description = "Собственные рабочие контуры IT WHITE: CRM-контроль, управление Telegram-коммуникациями и аналитика географии спроса с прозрачным статусом доказательств.";
+const canonical = "https://itwhite.ru/products/";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: "ru-RU",
+      isPartOf: { "@id": "https://itwhite.ru/#website" },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: productRegistry.length,
+        itemListElement: productRegistry.map((product, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "SoftwareApplication",
+            name: product.name,
+            applicationCategory: "BusinessApplication",
+            operatingSystem: "Web",
+            url: new URL(product.href, canonical).href,
+            description: product.summary
+          }
+        }))
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "Продукты", item: canonical }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CorporateHub
+    current="/products/"
+    eyebrow="Product registry / evidence states"
+    title="Рабочие системы. Статус каждой обозначен прямо."
+    lead="Разделяем доступную поверхность, внутренний рабочий контур и продуктовую логику. Статус не используется как замена клиентским результатам."
+    status="Owned products / bounded claims"
+  >
+    <section class="corporate-section">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">SYSTEM PASSPORTS / 03</p>
+          <div><h2>Что существует, что проверяется и чего мы не обещаем.</h2><p>Паспорт продукта показывает назначение, доступное доказательство и ограничение публичного утверждения.</p></div>
+        </header>
+        <div class="registry">
+          {productRegistry.map((product) => (
+            <article class="registry-card">
+              <span class="registry-card__code">{product.code}</span>
+              <div>
+                <span class="evidence-state" data-state={product.state}>{product.stateLabel}</span>
+                <h2><a href={product.href}>{product.name}</a></h2>
+              </div>
+              <div class="registry-card__body">
+                <p>{product.summary}</p>
+                <p><b>Доступное доказательство:</b> {product.evidence}</p>
+                <p class="boundary"><b>Не заявляем:</b> {product.boundary}</p>
+                <div><a class="text-link" href={product.href}>Открыть паспорт →</a></div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--muted">
+      <div class="corporate-frame">
+        <div class="corporate-cta">
+          <div><h2>Готовый контур не должен заставлять процесс притворяться типовым.</h2><p>Если продуктовая логика подходит только частично, проектируем интеграцию или отдельную систему под роли, данные и ограничения бизнеса.</p></div>
+          <a class="button" href="/custom-product-development/">Разработка продукта</a>
+        </div>
+      </div>
+    </section>
+  </CorporateHub>
+</BaseLayout>
+

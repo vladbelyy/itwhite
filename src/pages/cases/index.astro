@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/layout/Navigation.astro";
+import LegalLinks from "../../components/legal/LegalLinks.astro";
+import { caseSectors, caseStudies } from "../../data/caseStudies";
+
+const title = "Исследовательские сценарии автоматизации — IT WHITE";
+const description = "Редакционная библиотека сценариев AI и автоматизации: процесс, данные, роль человека, KPI, ограничения и публичные источники. Не клиентские кейсы.";
+const sectorId = (value: string) => `sector-${value.toLowerCase().replace(/[^a-zа-я0-9]+/gi, "-").replace(/(^-|-$)/g, "")}`;
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "CollectionPage", "@id": "https://itwhite.ru/cases/#page", name: title, description, url: "https://itwhite.ru/cases/", inLanguage: "ru-RU", isPartOf: { "@id": "https://itwhite.ru/#website" } },
+    { "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+      { "@type": "ListItem", position: 2, name: "Исследовательские сценарии", item: "https://itwhite.ru/cases/" }
+    ] },
+    { "@type": "ItemList", name: "Сценарии AI и автоматизации", numberOfItems: caseStudies.length, itemListElement: caseStudies.map((item, index) => ({ "@type": "ListItem", position: index + 1, url: `https://itwhite.ru/cases/${item.slug}/`, name: item.title })) }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} image="/images/editorial/case-library-v1.webp">
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="page-shell">
+    <Navigation />
+    <main id="top" class="case-library" tabindex="-1">
+      <section class="section case-library__hero">
+        <div class="section-inner case-library__hero-grid">
+          <div>
+            <p class="section-kicker">Editorial research / 50 scenarios</p>
+            <h1>Исследовательские карты процессов, а не клиентские кейсы.</h1>
+            <p class="hero__lead">Для каждого сценария показываем рабочий процесс, роль AI, контроль человека, данные, KPI и ограничения. Материалы помогают сформировать гипотезу, но не доказывают выполненное внедрение IT WHITE.</p>
+            <div class="case-library__notice"><b>EDITORIAL RESEARCH</b><span>Это отраслевые сценарии на основе публичных материалов, а не выдуманные клиентские кейсы IT WHITE.</span></div>
+          </div>
+          <img src="/images/editorial/case-library-v1.webp" width="1440" height="960" fetchpriority="high" alt="Три редакционные схемы: разрыв процесса, контур управления и контролируемое решение" />
+        </div>
+      </section>
+
+      <section class="section case-library__index" aria-labelledby="case-index-title">
+        <div class="section-inner">
+          <p class="section-kicker">Sector index</p>
+          <h2 id="case-index-title" class="section-title">Выберите процесс, а не модную технологию.</h2>
+          <nav class="case-library__sector-nav" aria-label="Отрасли и процессы">
+            {caseSectors.map((sector) => <a href={`#${sectorId(sector)}`}>{sector}<span>{caseStudies.filter((item) => item.sector === sector).length}</span></a>)}
+          </nav>
+          <aside class="case-library__method">
+            <span>EDITORIAL STANDARD</span>
+            <p>Каждый материал отвечает на пять вопросов: где возникает потеря, какие данные нужны, какую роль получает автоматизация, где остаётся человек и по каким показателям принимать пилот.</p>
+            <p><b>Автор:</b> Владислав Белый. <b>Коммерческая проверка:</b> Денис Кораблёв. Источники и дата обновления указаны внутри статьи.</p>
+          </aside>
+          {caseSectors.map((sector, sectorIndex) => (
+            <section id={sectorId(sector)} class="case-sector" aria-labelledby={`sector-title-${sectorIndex}`}>
+              <header><span>{String(sectorIndex + 1).padStart(2, "0")}</span><h3 id={`sector-title-${sectorIndex}`}>{sector}</h3><b>{caseStudies.filter((item) => item.sector === sector).length} SCENARIOS</b></header>
+              <div class="case-sector__grid">
+                {caseStudies.filter((item) => item.sector === sector).map((item, index) => (
+                  <a class="case-index-card" href={`/cases/${item.slug}/`}>
+                    <img src={item.visualPath} width="1600" height="1000" loading="lazy" alt="" />
+                    <span>{String(index + 1).padStart(2, "0")} / {item.area}</span>
+                    <h4>{item.title}</h4>
+                    <p>{item.problem}</p>
+                    <b>Открыть карту →</b>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+
+      <section class="section dark-section case-library__cta">
+        <div class="section-inner">
+          <p class="section-kicker">Your process</p>
+          <h2 class="section-title">Сценарий похож. Архитектура всегда зависит от ваших данных.</h2>
+          <p class="section-copy">На первичном разборе проверим, где находится потеря, что можно автоматизировать и где AI только добавит риск.</p>
+          <a class="button button--primary" href="/contact/?service=research-scenario">Запустить первичный разбор</a>
+        </div>
+      </section>
+    </main>
+    <footer class="service-legal"><span>© 2026 IT WHITE</span><LegalLinks /><a href="/">Главная</a></footer>
+  </div>
+</BaseLayout>

@@ -1,0 +1,135 @@
+# IT WHITE - full AI-readable summary
+
+IT WHITE is a technology consultancy and product engineering company for internal systems, operational automation, CRM control, AI tools, analytics, integrations, and custom product development.
+
+The agency position:
+
+- IT WHITE does not create isolated bots.
+- IT WHITE builds control contours for business processes.
+- The core problem is not the absence of AI, but breaks between sales, communications, CRM, data, and employee actions.
+- The method starts with process loss, not technology.
+- The output is a working system, not a presentation.
+
+## Main offer
+
+IT WHITE designs, implements, and supports systems that connect demand sources, communication channels, CRM, automatic checks, employee actions, AI modules, and management analytics.
+
+Intended process outcomes, subject to measurement in each implementation:
+
+- fewer lost leads;
+- clearer responsibility between employees and systems;
+- less manual work;
+- connected CRM and communication channels;
+- measurable demand from advertising, landing pages, and CRM attribution;
+- internal tools that match real business processes;
+- custom products where ready-made SaaS does not fit.
+
+## Services
+
+### Business process audit
+
+IT WHITE audits sales, CRM, data, integrations, and operational processes to find where the business loses speed, money, safety, and control.
+
+Canonical page: https://itwhite.ru/business-process-audit/
+
+### Formats and pricing
+
+IT WHITE publishes entry formats and budget ranges around Diagnose, Launch, and Operate: process diagnostics, first control contours, support, and product development.
+
+Canonical page: https://itwhite.ru/formats/
+
+### IT WHITE Control
+
+IT WHITE Control is the flagship control system for leads, SLA, responsible owners, next actions, and process risks. It works as a control layer above CRM and communication channels.
+
+Canonical page: https://itwhite.ru/it-white-control/
+
+### CRM automation and lead control
+
+IT WHITE designs CRM automation, SLA control, notifications, widgets, external logic, and integrations so that CRM does not only store leads but returns process risks to work.
+
+Canonical page: https://itwhite.ru/crm-automation/
+
+### AI automation
+
+IT WHITE embeds AI into actual operations: dialogue analysis, lead classification, document preparation, knowledge bases, quality control, and context analysis. AI is used only where it is more useful than deterministic code.
+
+Canonical page: https://itwhite.ru/ai-automation/
+
+### Demand and attribution
+
+IT WHITE treats search demand as a supporting demand and attribution system: semantic architecture, landing pages, content, technical fixes, analytics, CRM attribution, and management reporting.
+
+Canonical page: https://itwhite.ru/seo-support/
+
+### Custom product development
+
+IT WHITE designs and develops custom product solutions: internal platforms, dashboards, client portals, CRM widgets, AI tools, micro-SaaS MVPs, and industry-specific systems.
+
+Canonical page: https://itwhite.ru/custom-product-development/
+
+### Bitrix24 automation
+
+IT WHITE develops Bitrix24 integrations, webhooks, external handlers, automation scenarios, AI control logic, Telegram notifications, and lead monitoring.
+
+Canonical page: https://itwhite.ru/bitrix24-automation/
+
+### Internal tools
+
+IT WHITE creates dashboards, service panels, employee workplaces, calculators, reports, document generators, and operational interfaces.
+
+Canonical page: https://itwhite.ru/internal-tools/
+
+### Avito analytics
+
+IT WHITE works with Avito demand analytics, geographic demand, advertising opportunity detection, CRM connection, and lead control.
+
+Canonical page: https://itwhite.ru/avito-analytics/
+
+## Product contours and access boundaries
+
+### Avito Geo Demand
+
+Public URL: not claimed.  
+Purpose: internal analysis of geographic demand on Avito and regions where demand and promotion may differ.
+
+### Telegram Multiaccount
+
+URL: https://tg.itwhite.ru  
+Purpose: provide a unified workspace for several Telegram accounts, dialogue control, response tracking, and later AI classification.
+
+### CRM Lead Control
+
+URL: https://bot.itwhite.ru/admin (authenticated access)  
+Purpose: detect potentially unprocessed leads in Bitrix24, analyze context, and return the issue to a working chat.
+
+## Implementation library
+
+IT WHITE publishes 50 industry-specific AI and automation implementation scenarios for sales, support, documents, finance, HR, retail, logistics, manufacturing, construction, services, IT, security, marketing, and management.
+
+Canonical hub: https://itwhite.ru/cases/
+
+Every scenario distinguishes market research from IT WHITE client work and includes:
+
+- the process problem and target operating model;
+- the limited role of AI or deterministic automation;
+- human responsibility and approval points;
+- required systems and integrations;
+- measurable process KPIs;
+- risks and conditions where automation should not be used;
+- citations to public market research or vendor case repositories.
+
+## Method
+
+1. Observe - see how the process works now.
+2. Disassemble - break down roles, actions, data, and losses.
+3. Design - design a new logic and interface.
+4. Launch - create and launch a working version.
+5. Connect - integrate CRM, APIs, messengers, and data sources.
+6. Measure - check how the process changed in numbers.
+7. Productize - scale the solution inside the business or into a product.
+
+## Contact
+
+Project discussion: https://t.me/rgvldi  
+Project request: https://itwhite.ru/contact/

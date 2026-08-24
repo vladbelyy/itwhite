@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navigation from "../components/layout/Navigation.astro";
+import LegalLinks from "../components/legal/LegalLinks.astro";
+const title = "Cookies и данные браузера — IT WHITE";
+const description = "Какие cookies, localStorage, sessionStorage и аналитические технологии использует сайт IT WHITE.";
+---
+<BaseLayout title={title} description={description}>
+  <div class="page-shell">
+    <Navigation />
+    <main id="top" class="legal-page" tabindex="-1">
+      <article class="section"><div class="section-inner legal-document">
+        <p class="section-kicker">Legal / Browser data</p>
+        <h1>Политика cookies и данных браузера</h1>
+        <p class="legal-page__lead">Документ описывает фактическое использование cookies, localStorage, sessionStorage, Яндекс Метрики и серверных технических журналов на itwhite.ru.</p>
+
+        <h2>1. Кратко о применении</h2>
+        <p>При открытии страницы сайт запускает Яндекс Метрику, Webvisor и карту кликов, а также использует необходимые записи браузера для работы интерфейса. Внизу страницы показывается компактное уведомление с кнопкой «Понятно»; через 10 секунд оно закрывается автоматически.</p>
+        <p>Продолжая пользоваться сайтом после получения уведомления, пользователь соглашается с описанным применением cookies и аналитических технологий. Уведомление не ограничивает доступ к содержанию сайта.</p>
+
+        <h2>2. Записи IT WHITE</h2>
+        <div class="legal-table-wrap"><table class="legal-table">
+          <thead><tr><th>Ключ</th><th>Хранилище и назначение</th><th>Срок</th></tr></thead>
+          <tbody>
+            <tr><td><code>itwhite-loader</code></td><td>sessionStorage — не показывать вступительную загрузку повторно в пределах вкладки.</td><td>До закрытия вкладки или очистки данных браузера.</td></tr>
+            <tr><td><code>itwhiteDiagnosis</code></td><td>localStorage — сохранить ответы и результат добровольной диагностики для переноса в форму.</td><td>Не более 30 дней либо до очистки пользователем.</td></tr>
+            <tr><td><code>itwhiteCookieNotice</code></td><td>localStorage — сохранить версию показанного уведомления и не выводить его повторно.</td><td>До изменения версии уведомления или очистки данных сайта.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>3. Яндекс Метрика</h2>
+        <p>На сайте установлен счётчик Яндекс Метрики № <b>111614138</b>. Он загружается при открытии страницы. Настройки счётчика: Webvisor, карта кликов, отслеживание внешних ссылок, точный показатель отказов и передача событий воронки. Поля формы помечены как исключённые из записи нажатий клавиш Webvisor.</p>
+        <p>Метрика может устанавливать cookies и иные идентификаторы, включая <code>_ym_uid</code>, <code>_ym_d</code>, <code>_ym_isad</code>, <code>_ym_visorc</code> и технические идентификаторы доменов Яндекса. Их состав и сроки могут изменяться провайдером; актуальное описание публикуется в <a href="https://yandex.ru/support/metrica/ru/general/cookie-usage" target="_blank" rel="noopener noreferrer">документации Яндекс Метрики</a>.</p>
+        <p>Назначение обработки: понимать источники посещений, находить ошибки интерфейса, оценивать полезность материалов и измерять прохождение воронки. IT WHITE не использует эти сведения для самостоятельного рекламного профилирования.</p>
+
+        <h2>4. Размеченные цели</h2>
+        <div class="legal-table-wrap"><table class="legal-table">
+          <thead><tr><th>Событие</th><th>Что означает</th></tr></thead>
+          <tbody>
+            <tr><td><code>lead_form_start</code></td><td>Первое взаимодействие с формой обращения.</td></tr>
+            <tr><td><code>lead_submit_attempt</code></td><td>Попытка отправить заполненную форму.</td></tr>
+            <tr><td><code>lead_success</code></td><td>Сервер подтвердил успешную доставку заявки.</td></tr>
+            <tr><td><code>diagnostic_start</code></td><td>Ответ на первый вопрос диагностики.</td></tr>
+            <tr><td><code>diagnostic_complete</code></td><td>Получение результата диагностики и переход к разбору.</td></tr>
+            <tr><td><code>telegram_click</code></td><td>Переход в Telegram со страницы сайта.</td></tr>
+            <tr><td><code>contact_cta_click</code></td><td>Переход к форме с основного призыва к действию.</td></tr>
+            <tr><td><code>case_open</code></td><td>Открытие подробного сценария внедрения.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2>5. Управление в браузере</h2>
+        <p>Пользователь может ограничить или удалить cookies в настройках браузера, применить режим блокировки сторонних cookies или использовать сетевые фильтры. Блокировка аналитики не ограничивает чтение публичных материалов, но отключение localStorage и sessionStorage может повторно показывать загрузку и уведомление либо не позволить перенести результат диагностики в форму.</p>
+        <p>Удаление cookies и данных сайта не удаляет ранее сформированные агрегированные отчёты Яндекс Метрики.</p>
+
+        <h2>6. Технические журналы</h2>
+        <p>При обращении к серверу автоматически передаются IP-адрес, User-Agent, дата и время, URL, referrer и служебные заголовки. Они могут попадать в журналы nginx и приложения для безопасности, диагностики ошибок и ограничения злоупотреблений. Плановый срок хранения — до 12 месяцев, если данные не нужны дольше для расследования инцидента или исполнения закона.</p>
+
+        <h2>7. Контакты и обновления</h2>
+        <p>Вопросы можно направить Оператору на <a href="mailto:info@itwhite.ru">info@itwhite.ru</a>. Актуальная редакция доступна по адресу <a href="https://itwhite.ru/cookies/">https://itwhite.ru/cookies/</a>.</p>
+        <p class="legal-page__meta">Редакция № 4 от 14.08.2026.</p>
+        <a class="button button--primary" href="/">Вернуться на сайт</a>
+      </div></article>
+    </main>
+    <footer class="service-legal"><span>© 2026 IT WHITE</span><LegalLinks /></footer>
+  </div>
+</BaseLayout>

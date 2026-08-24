@@ -1,0 +1,322 @@
+---
+const normalizePath = (value: string) => {
+  const path = value.split("?")[0]?.split("#")[0] || "/";
+  return path === "/" ? path : `/${path.replace(/^\/+|\/+$/g, "")}/`;
+};
+
+const currentPath = normalizePath(Astro.url.pathname);
+interface Props {
+  theme?: "light" | "dark";
+}
+
+const { theme = "light" } = Astro.props;
+
+const solutionLinks = [
+  { href: "/lost-leads/", label: "Теряются заявки" },
+  { href: "/ai-automation/", label: "AI в операциях" },
+  { href: "/internal-tools/", label: "Внутренняя система" }
+];
+
+const productLinks = [
+  { href: "/it-white-control/", label: "IT WHITE Control" },
+  { href: "/avito-analytics/", label: "Аналитика Авито" },
+  { href: "/bitrix24-automation/", label: "Интеграции Bitrix24" }
+];
+
+const isCurrent = (href: string) => currentPath === normalizePath(href);
+const solutionIsCurrent = currentPath.startsWith("/solutions/") || solutionLinks.some((item) => isCurrent(item.href));
+const productIsCurrent = currentPath.startsWith("/products/") || productLinks.some((item) => isCurrent(item.href));
+const contextualServiceSlugs = new Set([
+  "lost-leads", "ai-in-operations", "internal-business-system", "it-white-control",
+  "avito-analytics", "bitrix24-automation", "crm-automation", "ai-automation",
+  "business-process-audit", "custom-product-development", "internal-tools",
+  "seo-support", "security-data", "diagnose", "formats"
+]);
+const currentSlug = currentPath.split("/").filter(Boolean).at(-1) || "";
+const contactService = contextualServiceSlugs.has(currentSlug) ? currentSlug : "process-review";
+const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
+---
+
+<nav class:list={["side-nav", "corporate-navigation", { "corporate-navigation--dark": theme === "dark" }]} aria-label="Основная навигация" data-corporate-navigation>
+  <a class="side-nav__brand" href="/#top">IT WHITE / 2026</a>
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/" }]} href="/" aria-current={currentPath === "/" ? "page" : undefined}>Главная</a>
+
+  <details class="corporate-navigation__group">
+    <summary aria-expanded="false">
+      <span>Решения</span><span aria-hidden="true">+</span>
+    </summary>
+    <div class="corporate-navigation__dropdown">
+      <a class:list={{ "is-active": currentPath === "/solutions/" }} href="/solutions/" aria-current={currentPath === "/solutions/" ? "page" : undefined}>Все решения</a>
+      {solutionLinks.map((item) => (
+        <a class:list={{ "is-active": isCurrent(item.href) }} href={item.href} data-service-slug={normalizePath(item.href).slice(1, -1)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+    </div>
+  </details>
+
+  <details class="corporate-navigation__group">
+    <summary aria-expanded="false">
+      <span>Продукты</span><span aria-hidden="true">+</span>
+    </summary>
+    <div class="corporate-navigation__dropdown">
+      <a class:list={{ "is-active": currentPath === "/products/" }} href="/products/" aria-current={currentPath === "/products/" ? "page" : undefined}>Все продукты</a>
+      {productLinks.map((item) => (
+        <a class:list={{ "is-active": isCurrent(item.href) }} href={item.href} data-service-slug={normalizePath(item.href).slice(1, -1)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+    </div>
+  </details>
+
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/work/" || currentPath.startsWith("/work/") }]} href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}>Внедрения</a>
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/insights/" || currentPath.startsWith("/insights/") }]} href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}>Материалы</a>
+  <a class:list={["corporate-navigation__link", { "is-active": isCurrent("/formats/") }]} href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы</a>
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/about/" || currentPath.startsWith("/about/") }]} href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О нас</a>
+  <a class:list={["corporate-navigation__cta", { "is-active": currentPath === "/contact/" }]} href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}>Разобрать процесс</a>
+</nav>
+
+<header class="mobile-header corporate-navigation" data-corporate-navigation>
+  <a href="/#top">IT WHITE</a>
+  <details class="mobile-menu">
+    <summary aria-expanded="false">Меню</summary>
+    <nav aria-label="Мобильная навигация">
+      <a href="/" aria-current={currentPath === "/" ? "page" : undefined}>Главная</a>
+
+      <details class="mobile-menu__group" open={solutionIsCurrent}>
+        <summary aria-expanded={solutionIsCurrent ? "true" : "false"}>Решения</summary>
+        <div>
+          <a href="/solutions/" aria-current={currentPath === "/solutions/" ? "page" : undefined}>Все решения</a>
+          {solutionLinks.map((item) => (
+            <a href={item.href} data-service-slug={normalizePath(item.href).slice(1, -1)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+          ))}
+        </div>
+      </details>
+
+      <details class="mobile-menu__group" open={productIsCurrent}>
+        <summary aria-expanded={productIsCurrent ? "true" : "false"}>Продукты</summary>
+        <div>
+          <a href="/products/" aria-current={currentPath === "/products/" ? "page" : undefined}>Все продукты</a>
+          {productLinks.map((item) => (
+            <a href={item.href} data-service-slug={normalizePath(item.href).slice(1, -1)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+          ))}
+        </div>
+      </details>
+
+      <a href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}>Внедрения</a>
+      <a href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}>Материалы</a>
+      <a href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы работы</a>
+      <a href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О нас</a>
+      <a href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}>Разобрать процесс</a>
+    </nav>
+  </details>
+</header>
+
+<script>
+  const normalizeNavigationPath = (value: string) => {
+    const path = value.split("?")[0]?.split("#")[0] || "/";
+    return path === "/" ? path : `/${path.replace(/^\/+|\/+$/g, "")}/`;
+  };
+
+  const serviceLabels: Record<string, string> = {
+    "lost-leads": "Теряются заявки",
+    "ai-in-operations": "AI в операциях",
+    "internal-business-system": "Внутренняя система",
+    "it-white-control": "IT WHITE Control",
+    "avito-analytics": "Аналитика Авито",
+    "bitrix24-automation": "Интеграции Bitrix24",
+    "crm-automation": "CRM-автоматизация и контроль лидов",
+    "ai-automation": "AI-автоматизация бизнес-процессов",
+    "business-process-audit": "Аудит бизнес-процессов",
+    "custom-product-development": "Разработка продуктов под бизнес-задачу",
+    "internal-tools": "Внутренние системы и панели",
+    "seo-support": "Спрос и атрибуция заявок",
+    "security-data": "Безопасность и данные",
+    "diagnose": "Диагностика процесса",
+    "formats": "Форматы работы"
+  };
+
+  const currentServiceSlug = normalizeNavigationPath(window.location.pathname).slice(1, -1);
+
+  document.querySelectorAll<HTMLElement>("[data-corporate-navigation]").forEach((navigation) => {
+    const groups = Array.from(navigation.querySelectorAll<HTMLDetailsElement>("details"));
+
+    groups.forEach((group) => {
+      const summary = group.querySelector<HTMLElement>(":scope > summary");
+      const syncExpanded = () => summary?.setAttribute("aria-expanded", String(group.open));
+      syncExpanded();
+      group.addEventListener("toggle", () => {
+        syncExpanded();
+        if (!group.open) return;
+        groups.forEach((other) => {
+          if (other !== group && other.parentElement === group.parentElement) other.open = false;
+        });
+      });
+    });
+
+    navigation.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const expandedSummary = navigation.querySelector<HTMLElement>("summary[aria-expanded='true']");
+      groups.forEach((group) => { group.open = false; });
+      expandedSummary?.focus();
+    });
+  });
+
+  if (serviceLabels[currentServiceSlug]) {
+    document.querySelectorAll<HTMLAnchorElement>('a[href="#contact"], a[href="/#contact"]').forEach((link) => {
+      link.href = `/contact/?service=${encodeURIComponent(currentServiceSlug)}`;
+      link.addEventListener("click", () => {
+        sessionStorage.setItem("itwhiteOriginService", JSON.stringify({
+          slug: currentServiceSlug,
+          savedAt: Date.now()
+        }));
+      });
+    });
+  }
+
+  document.querySelectorAll<HTMLDetailsElement>(".mobile-menu").forEach((menu) => {
+    menu.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+      link.addEventListener("click", () => { menu.open = false; });
+    });
+  });
+</script>
+
+<style>
+  .corporate-navigation__group {
+    position: relative;
+  }
+
+  .corporate-navigation__group > summary {
+    min-height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .corporate-navigation__group > summary::-webkit-details-marker,
+  .mobile-menu__group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .corporate-navigation__group[open] > summary,
+  .corporate-navigation__group > summary:hover {
+    color: var(--ink);
+  }
+
+  .corporate-navigation__group[open] > summary span:last-child {
+    transform: rotate(45deg);
+  }
+
+  .corporate-navigation__dropdown {
+    position: absolute;
+    z-index: 75;
+    top: calc(100% + 7px);
+    left: 0;
+    width: 248px;
+    display: grid;
+    gap: 1px;
+    padding: 1px;
+    border: 1px solid var(--ink);
+    background: var(--line);
+    box-shadow: 12px 16px 0 rgba(17, 17, 17, 0.08);
+  }
+
+  .corporate-navigation__dropdown a {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--paper);
+    color: var(--muted);
+  }
+
+  .corporate-navigation__dropdown a:hover,
+  .corporate-navigation__dropdown a.is-active {
+    background: var(--ink);
+    color: white;
+    transform: none;
+  }
+
+  .corporate-navigation__dropdown a.is-active::after {
+    display: none;
+  }
+
+  .corporate-navigation__cta {
+    min-height: 38px !important;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    background: var(--signal);
+    color: white !important;
+    font-weight: 700;
+  }
+
+  .corporate-navigation--dark .side-nav__brand,
+  .corporate-navigation--dark .corporate-navigation__link,
+  .corporate-navigation--dark .corporate-navigation__group > summary {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .corporate-navigation--dark .corporate-navigation__link:hover,
+  .corporate-navigation--dark .corporate-navigation__link.is-active,
+  .corporate-navigation--dark .corporate-navigation__group > summary:hover,
+  .corporate-navigation--dark .corporate-navigation__group[open] > summary {
+    color: white;
+  }
+
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__link,
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__group > summary {
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__link:hover,
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__link.is-active,
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__group > summary:hover,
+  :global(html[data-nav-theme="dark"]) .corporate-navigation__group[open] > summary {
+    color: white;
+  }
+
+  .mobile-menu nav {
+    max-height: calc(100svh - 94px);
+    overflow-y: auto;
+  }
+
+  .mobile-menu__group > summary {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .mobile-menu__group > summary::after {
+    content: "+";
+  }
+
+  .mobile-menu__group[open] > summary::after {
+    content: "−";
+  }
+
+  .mobile-menu__group > div a {
+    padding-left: 32px;
+    background: var(--surface);
+  }
+
+  .mobile-menu a[aria-current="page"] {
+    color: var(--signal);
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .side-nav {
+      display: none;
+    }
+  }
+</style>

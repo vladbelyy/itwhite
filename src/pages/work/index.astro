@@ -1,0 +1,86 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CorporateHub from "../../components/corporate/CorporateHub.astro";
+import { verifiedWork } from "../../data/corporate";
+
+const title = "Выполненная работа и границы доказательств — IT WHITE";
+const description = "Собственные рабочие системы IT WHITE и прозрачная граница между выполненной работой, продуктовой демонстрацией и редакционными сценариями.";
+const canonical = "https://itwhite.ru/work/";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: "ru-RU",
+      isPartOf: { "@id": "https://itwhite.ru/#website" },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: verifiedWork.length,
+        itemListElement: verifiedWork.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.title,
+          url: new URL(item.href, canonical).href
+        }))
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "Работа", item: canonical }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CorporateHub
+    current="/work/"
+    eyebrow="Work ledger / verified scope"
+    title="Показываем выполненное. Не присваиваем себе чужие результаты."
+    lead="Сейчас публичный доказательный слой состоит из собственных рабочих систем. Редакционные сценарии вынесены в исследования и не называются клиентскими кейсами."
+    status="Owned work / no client ROI claims"
+  >
+    <section class="corporate-section">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">VERIFIED WORK / OWN SYSTEMS</p>
+          <div><h2>Рабочие контуры с обозначенной границей факта.</h2><p>Здесь фиксируется только тот scope, который можно описать без выдуманного клиента, результата, SLA или коммерческой метрики.</p></div>
+        </header>
+        <div class="registry">
+          {verifiedWork.map((item) => (
+            <article class="registry-card">
+              <span class="registry-card__code">{item.code}</span>
+              <div><span class="evidence-state" data-state="verified">{item.status}</span><h2><a href={item.href}>{item.title}</a></h2><p>{item.product}</p></div>
+              <div class="registry-card__body">
+                <ul>{item.verified.map((fact) => <li>{fact}</li>)}</ul>
+                <p class="boundary"><b>Граница публикации:</b> {item.notClaimed}</p>
+                <div><a class="text-link" href={item.href}>Открыть связанный контур →</a></div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--muted">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">PUBLIC CLIENT WORK</p>
+          <div><h2>Публичные клиентские кейсы пока не заявлены.</h2><p>Этот пустой слот намеренный. Здесь появятся только проекты с подтверждённым scope и разрешением на публикацию. До этого библиотека сценариев остаётся редакционным исследованием.</p></div>
+        </header>
+        <div class="evidence-grid">
+          <article class="evidence-panel evidence-panel--empty"><span class="evidence-state" data-state="bounded">EMPTY BY DESIGN</span><h3>Нет согласованного публичного кейса</h3><p>Не подставляем вымышленное название компании, отзыв, показатели или ROI.</p></article>
+          <article class="evidence-panel"><span class="evidence-state" data-state="editorial">EDITORIAL RESEARCH</span><h3>50 сценариев внедрения</h3><p>Отдельная библиотека о процессах, данных, рисках и критериях пилота. Это не выполненные проекты IT WHITE.</p><a class="text-link" href="/insights/">Открыть исследования →</a></article>
+        </div>
+      </div>
+    </section>
+  </CorporateHub>
+</BaseLayout>
+

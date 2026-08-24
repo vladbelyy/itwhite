@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/layout/Navigation.astro";
+import DiagnosticFlow from "../../components/diagnostic/DiagnosticFlow";
+import LegalLinks from "../../components/legal/LegalLinks.astro";
+
+const title = "Проверка разрывов бизнес-процесса — IT WHITE";
+const description = "Короткая самостоятельная проверка: где процесс зависит от памяти сотрудников, ручных передач, разрозненных данных и позднего контроля.";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "IT WHITE Process Gap Check",
+      description,
+      url: "https://itwhite.ru/tools/process-gap-check/",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "RUB" },
+      provider: { "@id": "https://itwhite.ru/#organization" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "Инструменты", item: "https://itwhite.ru/tools/process-gap-check/" },
+        { "@type": "ListItem", position: 3, name: "Проверка процесса", item: "https://itwhite.ru/tools/process-gap-check/" }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="page-shell">
+    <Navigation />
+    <main id="top" tabindex="-1">
+      <section class="section service-hero" aria-labelledby="tool-title">
+        <div class="section-inner">
+          <p class="section-kicker">Tool / Process gap check</p>
+          <h1 id="tool-title">Где процесс всё ещё держится на ручном контроле?</h1>
+          <p class="hero__lead">Ответьте на семь вопросов. Инструмент покажет тип разрыва и следующий разумный шаг — без регистрации и автоматической отправки результата.</p>
+          <div class="service-passport">
+            <span>TIME</span><b>около 3 минут</b>
+            <span>PRIVACY</span><b>ответы остаются в браузере, пока вы сами не отправите обращение</b>
+          </div>
+        </div>
+      </section>
+      <section class="section section--diagnostic" aria-labelledby="diagnostic-title">
+        <div class="section-inner">
+          <p class="section-kicker">Self diagnostic</p>
+          <h2 id="diagnostic-title" class="section-title section-title--diagnostic">Проверка операционного контура</h2>
+          <div class="diagnostic-shell">
+            <DiagnosticFlow client:visible />
+          </div>
+        </div>
+      </section>
+      <section class="section dark-section case-library__cta" aria-labelledby="tool-next-step">
+        <div class="section-inner">
+          <p class="section-kicker">Next step</p>
+          <h2 id="tool-next-step" class="section-title">Результат проверки — гипотеза, а не диагноз.</h2>
+          <p class="section-copy">На рабочем разборе сверим вывод с реальными ролями, событиями и данными. Если новая система не нужна, скажем это до начала разработки.</p>
+          <a class="button button--primary" href="/contact/?service=process-gap-check">Разобрать результат с IT WHITE</a>
+        </div>
+      </section>
+    </main>
+    <footer class="service-legal"><span>© 2026 IT WHITE</span><LegalLinks /><a href="/">Главная</a></footer>
+  </div>
+</BaseLayout>

@@ -1,0 +1,16 @@
+{
+  "name": "IT WHITE",
+  "short_name": "IT WHITE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F1EC",
+  "theme_color": "#F2F1EC",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}

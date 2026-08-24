@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CorporateHub from "../../components/corporate/CorporateHub.astro";
+import { evidenceRules, teamProfiles } from "../../data/corporate";
+
+const title = "О компании и ответственность партнёров — IT WHITE";
+const description = "IT WHITE — продуктово-инженерная команда: кто отвечает за бизнес-процесс, архитектуру, разработку, внедрение и границы публичных доказательств.";
+const canonical = "https://itwhite.ru/about/";
+const organizationId = "https://itwhite.ru/#organization";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": `${canonical}#page`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: "ru-RU",
+      isPartOf: { "@id": "https://itwhite.ru/#website" },
+      about: { "@id": organizationId }
+    },
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: "IT WHITE",
+      legalName: "ИП Белый В.М.",
+      taxID: "772333809099",
+      url: "https://itwhite.ru/",
+      email: "mailto:info@itwhite.ru",
+      employee: teamProfiles.map((person) => ({ "@id": `${canonical}#${person.id}` }))
+    },
+    ...teamProfiles.map((person) => ({
+      "@type": "Person",
+      "@id": `${canonical}#${person.id}`,
+      name: person.name,
+      jobTitle: person.role,
+      image: new URL(person.image, canonical).href,
+      url: `${canonical}#${person.id}`,
+      worksFor: { "@id": organizationId }
+    })),
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "О компании", item: canonical }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CorporateHub
+    current="/about/"
+    eyebrow="Company / responsibility map"
+    title="Два партнёра. Ответственность не передаётся по цепочке."
+    lead="Один контур ответственности связывает бизнес-процесс, архитектуру, разработку и внедрение. Публичные утверждения ограничиваем тем, что можем подтвердить."
+    status="Named owners / legal entity disclosed"
+  >
+    <section class="corporate-section">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">TEAM / DIRECT OWNERSHIP</p>
+          <div><h2>Кто отвечает за решение.</h2><p>Роли описаны через ответственность в проекте, без непроверенных сертификатов, наград и внешних статусов.</p></div>
+        </header>
+        <div class="profile-grid">
+          {teamProfiles.map((person) => (
+            <article id={person.id} class="profile-card">
+              <img src={person.image} width="960" height="1200" loading="lazy" alt={`${person.name}, ${person.role} IT WHITE`} />
+              <div class="profile-card__copy">
+                <span class="evidence-state" data-state="verified">{person.role}</span>
+                <h2>{person.name}</h2>
+                <p>{person.responsibility}</p>
+                <ul class="plain-list">{person.areas.map((area) => <li>{area}</li>)}</ul>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--muted">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">PUBLICATION STANDARD</p>
+          <div><h2>Как мы отделяем доказательство от обещания.</h2><p>Эти правила применяются к продуктам, выполненной работе, исследованиям и коммерческим материалам.</p></div>
+        </header>
+        <div class="evidence-grid">
+          {evidenceRules.map((rule, index) => <article class="evidence-panel"><span class="registry-card__code">RULE / {String(index + 1).padStart(2, "0")}</span><h3>{rule}</h3></article>)}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--dark">
+      <div class="corporate-frame">
+        <header class="corporate-section__head"><p class="corporate-label">LEGAL / CONTACT</p><div><h2>IT WHITE работает как ИП Белый В.М.</h2><p>ИНН 772333809099 / ОГРНИП 323774600178142. Общий и юридический канал: info@itwhite.ru.</p></div></header>
+        <a class="button button--primary" href="mailto:info@itwhite.ru">info@itwhite.ru</a>
+      </div>
+    </section>
+  </CorporateHub>
+</BaseLayout>
+

@@ -1,0 +1,86 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CorporateHub from "../../components/corporate/CorporateHub.astro";
+import { caseSectors, caseStudies } from "../../data/caseStudies";
+
+const title = "Исследования процессов и сценариев автоматизации — IT WHITE";
+const description = "Редакционная библиотека IT WHITE: 50 сценариев автоматизации по 13 направлениям. Это исследовательские материалы, а не клиентские кейсы компании.";
+const canonical = "https://itwhite.ru/insights/";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: "ru-RU",
+      isPartOf: { "@id": "https://itwhite.ru/#website" },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: caseStudies.length,
+        itemListElement: caseStudies.map((study, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: study.title,
+          url: `https://itwhite.ru/cases/${study.slug}/`
+        }))
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "Исследования", item: canonical }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} image="/images/editorial/case-library-v1.webp">
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CorporateHub
+    current="/insights/"
+    eyebrow="Editorial research / implementation scenarios"
+    title="Исследования процессов. Не клиентские кейсы."
+    lead="50 материалов разбирают покупающий момент, данные, роль автоматизации, контроль человека, KPI и риск. Они помогают сформулировать задачу, но не доказывают результат IT WHITE у клиента."
+    status="Editorial research / sources disclosed"
+  >
+    <section class="corporate-section">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">RESEARCH INDEX / {caseStudies.length}</p>
+          <div><h2>Ищите процесс, а не модную технологию.</h2><p>В каждой отрасли собраны сценарии с одинаковым стандартом проверки. Редакционный статус сохраняется на индексной и детальной странице.</p></div>
+        </header>
+        <div class="sector-grid">
+          {caseSectors.map((sector) => {
+            const studies = caseStudies.filter((study) => study.sector === sector);
+            return (
+              <article class="sector-card">
+                <span class="sector-card__count">{String(studies.length).padStart(2, "0")} SCENARIOS</span>
+                <h3>{sector}</h3>
+                <p>{studies.slice(0, 3).map((study) => study.title).join(" / ")}</p>
+                <div class="related-links">{studies.slice(0, 3).map((study) => <a href={`/cases/${study.slug}/`}>{study.caseNumber}</a>)}</div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--muted">
+      <div class="corporate-frame">
+        <div class="evidence-grid">
+          <article class="evidence-panel"><span class="evidence-state" data-state="editorial">WHAT IT IS</span><h3>Редакционный синтез публичных источников</h3><p>Материалы дают структуру обсуждения процесса: событие, данные, владелец, риск и критерий пилота.</p></article>
+          <article class="evidence-panel"><span class="evidence-state" data-state="bounded">WHAT IT IS NOT</span><h3>Не выполненная работа и не обещание результата</h3><p>Сценарии не подтверждают внедрение у клиента, процент эффективности, срок окупаемости или готовность конкретной интеграции.</p></article>
+        </div>
+        <div class="corporate-cta">
+          <div><h2>Открыть полный индекс из 50 материалов.</h2><p>В библиотеке доступны источники, дата обновления, автор, проверяющий и границы human-in-the-loop.</p></div>
+          <a class="button" href="/cases/">Перейти в библиотеку</a>
+        </div>
+      </div>
+    </section>
+  </CorporateHub>
+</BaseLayout>
+

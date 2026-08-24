@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CorporateHub from "../../components/corporate/CorporateHub.astro";
+import { solutionGroups } from "../../data/corporate";
+
+const title = "Решения для контроля бизнес-процессов — IT WHITE";
+const description = "CRM-контроль, внутренние системы, AI в операциях, интеграции и атрибуция спроса: направления IT WHITE с понятными границами и результатом.";
+const canonical = "https://itwhite.ru/solutions/";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${canonical}#page`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: "ru-RU",
+      isPartOf: { "@id": "https://itwhite.ru/#website" },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: solutionGroups.length,
+        itemListElement: solutionGroups.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.title,
+          url: new URL(item.href, canonical).href
+        }))
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+        { "@type": "ListItem", position: 2, name: "Решения", item: canonical }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CorporateHub
+    current="/solutions/"
+    eyebrow="Solutions registry / business control"
+    title="Не набор технологий. Пять контуров, где бизнес теряет управление."
+    lead="Выбираем направление по наблюдаемому сбою: потерянному действию, разрыву данных, ручному решению или отсутствию измеримого источника."
+    status="Service scope / no guaranteed outcome"
+  >
+    <section class="corporate-section">
+      <div class="corporate-frame">
+        <header class="corporate-section__head">
+          <p class="corporate-label">OPERATING AREAS / 05</p>
+          <div>
+            <h2>Сначала фиксируем потерю. Затем выбираем систему.</h2>
+            <p>Каждое направление описывает рабочий контур, состав результата и границу ответственности. Технология не подменяет владельца процесса.</p>
+          </div>
+        </header>
+        <div class="registry">
+          {solutionGroups.map((item) => (
+            <article class="registry-card">
+              <span class="registry-card__code">{item.code}</span>
+              <h2><a href={item.href}>{item.title}</a></h2>
+              <div class="registry-card__body">
+                <p>{item.problem}</p>
+                <ul>{item.scope.map((entry) => <li>{entry}</li>)}</ul>
+                <p class="boundary"><b>Граница:</b> {item.boundary}</p>
+                <div class="related-links">{item.related.map((link) => <a href={link.href}>{link.label}</a>)}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="corporate-section corporate-section--muted">
+      <div class="corporate-frame">
+        <div class="corporate-cta">
+          <div><h2>Не знаете, какой раздел подходит? Начните с карты процесса.</h2><p>Diagnose фиксирует роли, события, данные и точки потери до выбора платформы и объёма разработки.</p></div>
+          <a class="button" href="/formats/">Открыть Diagnose</a>
+        </div>
+      </div>
+    </section>
+  </CorporateHub>
+</BaseLayout>

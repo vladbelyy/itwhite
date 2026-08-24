@@ -1,0 +1,15 @@
+/* Keep the fixed notice out of document layout and decide its first-paint
+   visibility from the head script before the body is rendered. */
+.cookie-notice {
+  contain: layout paint style;
+  font-family: Arial, sans-serif;
+}
+
+.cookie-notice strong,
+.cookie-notice > button {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+html[data-cookie-notice-seen="true"] .cookie-notice {
+  display: none !important;
+}

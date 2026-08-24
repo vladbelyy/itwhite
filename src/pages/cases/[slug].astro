@@ -1,0 +1,258 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/layout/Navigation.astro";
+import LegalLinks from "../../components/legal/LegalLinks.astro";
+import { caseStudies, getCaseUrl, scenarioSources } from "../../data/caseStudies";
+
+export const prerender = true;
+export function getStaticPaths() {
+  return caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }));
+}
+
+const { study } = Astro.props;
+const title = `${study.title}: сценарий внедрения — IT WHITE`;
+const description = `Сценарий внедрения «${study.title}»: процесс, данные, роль AI, контроль человека, KPI, риски и план пилота.`;
+const canonical = getCaseUrl(study.slug);
+const riskSensitiveSectors = ["Финансы и документы", "HR и профессиональные услуги", "Медицина и сервис", "IT и безопасность"];
+const sourceIds = [
+  ...study.sourceIds,
+  ...(riskSensitiveSectors.includes(study.sector) ? ["nistAI"] : []),
+  ...(study.slug === "content-operations-approval" ? ["googleSearchAI"] : [])
+];
+const sources = [...new Set(sourceIds)].map((id) => scenarioSources[id]).filter(Boolean);
+const relatedStudies = caseStudies.filter((item) => item.slug !== study.slug && item.sector === study.sector).slice(0, 3);
+const serviceBySector: Record<string, { href: string; label: string }> = {
+  "Продажи и CRM": { href: "/crm-automation/", label: "CRM-контроль и автоматизация" },
+  "Поддержка и сервис": { href: "/ai-automation/", label: "AI и автоматизация сервиса" },
+  "Финансы и документы": { href: "/internal-tools/", label: "Внутренние системы" },
+  "IT и безопасность": { href: "/ai-automation/", label: "Контролируемые AI-системы" },
+  "Маркетинг и управление": { href: "/business-process-audit/", label: "Диагностика бизнес-процесса" }
+};
+const relatedService = serviceBySector[study.sector] || { href: "/custom-product-development/", label: "Разработка системы под процесс" };
+const economicDrivers = [
+  `объём событий, в которых возникает проблема «${study.problem}»`,
+  `стоимость ручного действия, задержки или ошибки по показателю «${study.kpis[0]}»`,
+  `доля исключений, которые после запуска всё равно должен проверять человек`,
+  `стоимость интеграции и сопровождения систем: ${study.integrations.join(", ")}`
+];
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "https://itwhite.ru/#organization", name: "IT WHITE", legalName: "ИП Белый В.М.", taxID: "772333809099", url: "https://itwhite.ru/", email: "mailto:info@itwhite.ru" },
+    { "@type": "Person", "@id": "https://itwhite.ru/#vladislav-bely", name: "Владислав Белый", jobTitle: "Product & Engineering Partner", worksFor: { "@id": "https://itwhite.ru/#organization" }, url: "https://itwhite.ru/about/#vladislav-bely" },
+    { "@type": "Person", "@id": "https://itwhite.ru/#denis-korablev", name: "Денис Кораблёв", jobTitle: "Business & Delivery Partner", worksFor: { "@id": "https://itwhite.ru/#organization" }, url: "https://itwhite.ru/about/#denis-korablev" },
+    { "@type": "Article", "@id": `${canonical}#article`, headline: study.title, description, datePublished: study.publishedAt, dateModified: study.updatedAt, inLanguage: "ru-RU", articleSection: study.sector, author: { "@id": "https://itwhite.ru/#vladislav-bely" }, reviewedBy: { "@id": "https://itwhite.ru/#denis-korablev" }, publisher: { "@id": "https://itwhite.ru/#organization" }, image: `https://itwhite.ru${study.visualPath}`, mainEntityOfPage: canonical, citation: sources.map((source) => source.url), about: study.integrations.map((name) => ({ "@type": "Thing", name })) },
+    { "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "IT WHITE", item: "https://itwhite.ru/" },
+      { "@type": "ListItem", position: 2, name: "Исследовательские сценарии", item: "https://itwhite.ru/cases/" },
+      { "@type": "ListItem", position: 3, name: study.title, item: canonical }
+    ] }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} image={study.visualPath} type="article" publishedTime={study.publishedAt} modifiedTime={study.updatedAt}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="page-shell">
+    <Navigation />
+    <main id="top" class="case-article" tabindex="-1">
+      <article>
+        <header class="section case-article__hero">
+          <div class="section-inner">
+            <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">IT WHITE</a><span>/</span><a href="/cases/">Библиотека</a><span>/</span><b>{study.sector}</b></nav>
+            <div class="case-article__hero-grid">
+              <div>
+                <p class="section-kicker">Implementation scenario / {study.caseNumber} / {study.area}</p>
+                <h1>{study.title}</h1>
+                <p class="hero__lead">{study.problem}</p>
+                <div class="case-article__answer">
+                  <span>ОТВЕТ ЗА 60 СЕКУНД</span>
+                  <p>{study.automation} Финальное решение и работа с исключениями остаются у ответственного: {study.human}</p>
+                  <a href={`/contact/?service=research-scenario&scenario=${study.slug}`}>Проверить применимость сценария →</a>
+                </div>
+              </div>
+              <figure class="case-article__visual">
+                <img src={study.visualPath} width="1600" height="1000" fetchpriority="high" alt={study.visualAlt} />
+                <figcaption>Схема сценария IT WHITE: событие → контекст → контроль → решение человека.</figcaption>
+              </figure>
+            </div>
+            <div class="case-article__passport">
+              <span>SECTOR</span><b>{study.sector}</b>
+              <span>BUYER</span><b>{study.buyer}</b>
+              <span>STATUS</span><b>PUBLIC RESEARCH SCENARIO</b>
+              <span>UPDATED</span><b>{study.updatedAt}</b>
+            </div>
+            <div class="case-article__byline">
+              <span>АВТОР</span><b>Владислав Белый / Product & Engineering Partner</b>
+              <span>ПРОВЕРИЛ</span><b>Денис Кораблёв / Business & Delivery Partner</b>
+              <span>МЕТОД</span><b>Процесс → данные → решение → риск → измеримость</b>
+            </div>
+            <nav class="case-article__toc" aria-label="Содержание статьи">
+              <a href="#process">Процесс</a><a href="#architecture">Архитектура</a><a href="#economics">Экономика</a><a href="#pilot">Пилот</a><a href="#sources">Источники</a>
+            </nav>
+          </div>
+        </header>
+
+        <section id="process" class="section case-article__map">
+          <div class="section-inner">
+            <p class="section-kicker">Problem / buying moment</p>
+            <h2 class="section-title">Почему этот процесс становится задачей для руководителя.</h2>
+            <div class="case-article__editorial-copy">
+              <p>Обычно к сценарию «{study.title}» приходит {study.buyer}, когда {study.buyingTrigger}. В этот момент локальная ручная проверка уже не масштабируется, но покупка отдельного AI-инструмента ещё не гарантирует изменения процесса.</p>
+              <p>{study.sectorInsight}</p>
+              <blockquote><span>ПОЗИЦИЯ IT WHITE</span><b>{study.businessOutcome}</b></blockquote>
+            </div>
+            <p class="section-kicker case-article__subkicker">Target operating model</p>
+            <h3 class="case-article__section-heading">Что именно меняется после внедрения.</h3>
+            <div class="scenario-route" aria-label="Целевая логика автоматизации">
+              <article><span>01 / SIGNAL</span><b>Событие поступает из рабочей системы</b></article>
+              <article><span>02 / CONTEXT</span><b>Данные и правила собираются в единый контекст</b></article>
+              <article><span>03 / CONTROL</span><b>{study.automation}</b></article>
+              <article><span>04 / OWNER</span><b>{study.human}</b></article>
+            </div>
+            <div class="case-article__walkthrough">
+              <header><span>OPERATIONAL WALKTHROUGH</span><h3>Как разобрать именно этот сценарий.</h3></header>
+              {study.scenarioAnalysis.map((paragraph, index) => <article><span>{String(index + 1).padStart(2, "0")}</span><p>{paragraph}</p></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section id="architecture" class="section dark-section case-article__architecture">
+          <div class="section-inner case-article__two-column">
+            <div>
+              <p class="section-kicker">Architecture</p>
+              <h2 class="section-title">AI не получает власть над процессом. Он получает ограниченную роль.</h2>
+            </div>
+            <div class="scenario-spec">
+              <article><span>SYSTEMS</span><ul>{study.integrations.map((item) => <li>{item}</li>)}</ul></article>
+              <article><span>HUMAN IN THE LOOP</span><p>{study.human}</p></article>
+              <article><span>MAIN RISK</span><p>{study.risk}</p></article>
+              <article><span>DESIGN RULE</span><p>Каждый вывод хранит исходное событие, версию правила или модели и действие ответственного. Если контекста недостаточно, система не угадывает, а переводит событие на ручную проверку.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="economics" class="section case-article__economics">
+          <div class="section-inner">
+            <p class="section-kicker">Business case / no invented ROI</p>
+            <h2 class="section-title">Экономика начинается с потери, которую можно пересчитать.</h2>
+            <p class="section-copy">До сметы мы не обещаем проценты эффективности. Сначала измеряем частоту события, стоимость ручной работы и ошибки, нагрузку на проверяющего и цену эксплуатации контура.</p>
+            <div class="economic-grid">
+              {economicDrivers.map((item, index) => <article><span>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></article>)}
+            </div>
+            <div class="case-article__formula">
+              <span>DECISION MODEL</span>
+              <b>Эффект = предотвращённые потери + освобождённое время − внедрение − сопровождение − стоимость ошибок</b>
+              <p>Если измеримый эффект не покрывает стоимость контура и риск, задачу не нужно превращать в отдельный продукт.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section case-article__metrics">
+          <div class="section-inner">
+            <p class="section-kicker">Measurement</p>
+            <h2 class="section-title">Как понять, что внедрение работает.</h2>
+            <div class="metric-grid">{study.kpis.map((item, index) => <article><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b><p>Источник: {study.integrations[index % study.integrations.length]}. Базовая линия: 2–4 недели до пилота.</p></article>)}</div>
+            <div class="case-article__decision">
+              <span>DO NOT AUTOMATE BLINDLY</span>
+              <h3>Сначала проверяем процесс, качество данных и владельца решения.</h3>
+              <p>{study.risk}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section case-article__readiness">
+          <div class="section-inner case-article__two-column">
+            <div>
+              <p class="section-kicker">Readiness check</p>
+              <h2 class="section-title">Когда этот сценарий имеет смысл.</h2>
+              <p class="section-copy">Автоматизация оправдана, когда проблема повторяется, влияет на управляемый показатель и у процесса есть владелец. Для сценария «{study.title}» сначала проверяем не модель, а фактический маршрут работы.</p>
+            </div>
+            <ol class="readiness-list">{study.decisionCriteria.map((item, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><b>{index === 0 ? "Повторяемость" : index === 1 ? "Доступность данных" : index === 2 ? "Владелец решения" : "Ограниченный риск"}</b><p>{item}</p></li>)}</ol>
+          </div>
+        </section>
+
+        <section class="section case-article__questions">
+          <div class="section-inner case-article__two-column">
+            <div>
+              <p class="section-kicker">Questions before code</p>
+              <h2 class="section-title">Что нужно выяснить до выбора технологии.</h2>
+              <p class="section-copy">Ответы отделяют реальную задачу от красивой демонстрации. Они же задают границы пилота и критерии остановки.</p>
+            </div>
+            <ol class="question-list">{study.firstQuestions.map((item, index) => <li><span>Q{index + 1}</span><p>{item}</p></li>)}</ol>
+          </div>
+        </section>
+
+        <section id="pilot" class="section case-article__pilot">
+          <div class="section-inner">
+            <p class="section-kicker">Pilot / 4–8 weeks</p>
+            <h2 class="section-title">Как запускать без большой ставки вслепую.</h2>
+            <div class="pilot-grid">
+              <article><span>01 / DIAGNOSE</span><h3>Зафиксировать текущий маршрут</h3><p>Интервью с владельцем процесса, карта событий, исключения, права доступа и исходные значения KPI. На этом этапе может выясниться, что проблему надёжнее решает обычная логика, а не AI.</p></article>
+              <article><span>02 / CONNECT</span><h3>Собрать минимальный контекст</h3><p>Подключаем только необходимые источники: {study.integrations.join(", ")}. Не строим озеро данных до появления первого работающего сценария.</p></article>
+              <article><span>03 / CONTROL</span><h3>Запустить на ограниченной зоне</h3><p>{study.automation} Первые решения логируются, а низкая уверенность и исключения уходят человеку.</p></article>
+              <article><span>04 / OPERATE</span><h3>Сравнить с базовой линией</h3><p>Смотрим на {study.kpis.join(", ")}. Если процесс не изменился, не масштабируем интерфейс только ради уже написанного кода.</p></article>
+            </div>
+            <div class="deliverable-strip"><span>OUTPUT</span><b>Карта процесса</b><b>Матрица событий и ответственности</b><b>Рабочий пилот</b><b>Журнал решений</b><b>План сопровождения</b></div>
+            <div class="pilot-guardrails">
+              <article><span>ACCEPTANCE</span><p>Пилот принимается по изменению {study.kpis.join(", ")}, а не по количеству экранов и промптов.</p></article>
+              <article><span>STOP CONDITION</span><p>Останавливаем масштабирование, если данные нестабильны, ответственный не использует сигнал или сохраняется риск: {study.risk}</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section dark-section case-article__offer">
+          <div class="section-inner">
+            <p class="section-kicker">How IT WHITE enters the project</p>
+            <h2 class="section-title">Не продаём всю систему до проверки процесса.</h2>
+            <div class="offer-grid">
+              <article><span>01 / DIAGNOSE</span><h3>100–180 тыс. ₽</h3><p>Карта процесса, данные, потери, владелец решения, варианты архитектуры и предварительная экономика.</p></article>
+              <article><span>02 / LAUNCH</span><h3>от 450 тыс. ₽</h3><p>Одна ключевая задача, необходимые интеграции, роли, журнал решений, запуск и критерии результата.</p></article>
+              <article><span>03 / OPERATE</span><h3>от 100 тыс. ₽/мес.</h3><p>Мониторинг, исправления, качество решений, новые правила, развитие интеграций и отчёт по работе системы.</p></article>
+            </div>
+            <a class="case-article__service-link" href={relatedService.href}><span>СВЯЗАННОЕ НАПРАВЛЕНИЕ</span><b>{relatedService.label} →</b></a>
+          </div>
+        </section>
+
+        <section class="section case-article__faq">
+          <div class="section-inner">
+            <p class="section-kicker">Decision FAQ</p>
+            <h2 class="section-title">Три вопроса, которые защищают проект от лишней сложности.</h2>
+            <div class="case-faq-grid">
+              <article><h3>Здесь точно нужен AI?</h3><p>Не обязательно. Если событие определяется стабильными правилами, обычная логика будет дешевле, быстрее и надёжнее. AI нужен там, где решение зависит от неструктурированного контекста.</p></article>
+              <article><h3>Что подготовить к первичному разбору?</h3><p>Один реальный пример сбоя, список систем ({study.integrations.join(", ")}), пример исходных данных и человека, который сегодня принимает финальное решение.</p></article>
+              <article><h3>Что происходит при ошибке?</h3><p>Система сохраняет исходные данные и причину вывода, не выполняет критическое действие без разрешения и передаёт исключение человеку. Главный риск сценария: {study.risk}</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="sources" class="section case-article__sources">
+          <div class="section-inner">
+            <p class="section-kicker">Evidence base</p>
+            <h2 class="section-title">На каких рыночных сигналах основан сценарий.</h2>
+            <p class="section-copy">Материал синтезирует публичные исследования и практики. Мы не переносим чужие кейсы на себя и не обещаем чужие показатели. Экономика рассчитывается только после анализа вашего процесса.</p>
+            <ol>{sources.map((source) => <li><a href={source.url} rel="noopener" target="_blank"><b>{source.publisher}</b><span>{source.title} / {source.year}</span></a></li>)}</ol>
+          </div>
+        </section>
+
+        <section class="section case-article__related">
+          <div class="section-inner">
+            <p class="section-kicker">Related scenarios / {study.sector}</p>
+            <h2 class="section-title">Следующие процессы в том же контуре.</h2>
+            <div class="related-case-grid">{relatedStudies.map((item) => <a href={`/cases/${item.slug}/`}><img src={item.visualPath} width="1600" height="1000" loading="lazy" alt={item.visualAlt} /><span>{item.caseNumber} / {item.area}</span><b>{item.title}</b></a>)}</div>
+          </div>
+        </section>
+
+        <section class="section dark-section case-article__cta">
+          <div class="section-inner">
+            <p class="section-kicker">Fit check / primary review</p>
+            <h2 class="section-title">Проверим сценарий «{study.title}» на вашем процессе.</h2>
+            <p class="section-copy">На первичном разговоре уточним разрыв, доступные данные, владельца решения и разумный следующий шаг. Полная карта процесса выполняется только в отдельной диагностике.</p>
+            <div class="case-article__cta-actions"><a class="button button--primary" href={`/contact/?service=research-scenario&scenario=${study.slug}`}>Запустить первичный разбор</a><a class="button" href={relatedService.href}>{relatedService.label}</a></div>
+          </div>
+        </section>
+      </article>
+    </main>
+    <footer class="service-legal"><span>© 2026 IT WHITE</span><a href="/cases/">Все сценарии</a><LegalLinks /></footer>
+  </div>
+</BaseLayout>

@@ -1,0 +1,219 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navigation from "../components/layout/Navigation.astro";
+import StatusBar from "../components/layout/StatusBar";
+import { SystemLayer } from "../components/interactive/SystemLayer";
+import { servicePages, getServiceUrl } from "../data/servicePages";
+import { serviceDepth } from "../data/serviceDepth";
+import { caseStudies } from "../data/caseStudies";
+import { redirectedServiceSlugs } from "../lib/sitemap-governance";
+import LegalLinks from "../components/legal/LegalLinks.astro";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return servicePages.filter((page) => !redirectedServiceSlugs.has(page.slug)).map((page) => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+}
+
+const { page } = Astro.props;
+const title = `${page.title} — IT WHITE`;
+const description = page.description;
+const canonical = getServiceUrl(page.slug);
+const sectorMap: Record<string, string[]> = {
+  "crm-automation": ["Продажи и CRM"],
+  "it-white-control": ["Продажи и CRM", "Поддержка и сервис"],
+  "ai-automation": ["Поддержка и сервис", "Финансы и документы", "IT и безопасность"],
+  "business-process-audit": ["Маркетинг и управление"],
+  "formats": ["Маркетинг и управление"],
+  "custom-product-development": ["IT и безопасность", "Маркетинг и управление"],
+  "bitrix24-automation": ["Продажи и CRM"],
+  "internal-tools": ["HR и профессиональные услуги", "IT и безопасность"],
+  "avito-analytics": ["Ритейл и e-commerce", "Маркетинг и управление"],
+  "seo-support": ["Маркетинг и управление"]
+  ,"lost-leads": ["Продажи и CRM"]
+  ,"ai-in-operations": ["Поддержка и сервис", "IT и безопасность"]
+  ,"internal-business-system": ["IT и безопасность", "HR и профессиональные услуги"]
+  ,"security-data": ["IT и безопасность"]
+  ,"diagnose": ["Маркетинг и управление"]
+};
+const relatedScenarios = caseStudies.filter((item) => (sectorMap[page.slug] ?? []).includes(item.sector)).slice(0, 3);
+const depth = serviceDepth[page.slug];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://itwhite.ru/#organization",
+      name: "IT WHITE",
+      legalName: "ИП Белый В.М.",
+      taxID: "772333809099",
+      url: "https://itwhite.ru",
+      email: "mailto:info@itwhite.ru",
+      sameAs: ["https://t.me/rgvldi"]
+    },
+    {
+      "@type": "Service",
+      name: page.title,
+      description: page.description,
+      provider: { "@id": "https://itwhite.ru/#organization" },
+      areaServed: "RU",
+      url: canonical,
+      serviceType: page.label
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: page.faq.map(([question, answer]) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: answer
+        }
+      }))
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "IT WHITE",
+          item: "https://itwhite.ru/"
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: page.title,
+          item: canonical
+        }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="page-shell">
+    <Navigation />
+    <SystemLayer client:idle />
+    <StatusBar client:idle />
+    <main id="top" tabindex="-1">
+      <section class="section service-hero" data-status-section>
+        <div class="section-inner">
+          <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">IT WHITE</a><span>/</span><a href="/solutions/">Решения</a><span>/</span><b>{page.title}</b></nav>
+          <p class="section-kicker" data-reveal>{page.label}</p>
+          <h1 data-reveal>{page.title}</h1>
+          <p class="hero__lead" data-reveal>{page.description}</p>
+          <div class="service-passport" data-reveal>
+            <span>FOR</span><b>{page.audience}</b>
+            <span>RESULT</span><b>{page.result}</b>
+          </div>
+          <div class="hero__actions">
+            <a class="button button--primary" href={`/contact/?service=${page.slug}`}>Разобрать процесс</a>
+            <a class="button" href="/solutions/">Все решения</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section service-detail" data-status-section>
+        <div class="section-inner service-detail__grid">
+          <article class="service-statement" data-reveal>
+            <span>PROCESS PROBLEM</span>
+            <h2>{page.problem}</h2>
+          </article>
+          <article class="service-statement service-statement--dark" data-reveal>
+            <span>IT WHITE LAYER</span>
+            <h2>{page.result}</h2>
+          </article>
+        </div>
+      </section>
+
+      <section class="section service-map-section" data-status-section>
+        <div class="section-inner">
+          <p class="section-kicker" data-reveal>Operating map</p>
+          <h2 class="section-title section-title--offers" data-reveal>Как выглядит рабочий контур.</h2>
+          <div class="service-flow-map" data-reveal>
+            {page.flow.map((item) => <b>{item}</b>)}
+          </div>
+          <div class="service-columns">
+            <article data-reveal>
+              <span>DELIVERABLES</span>
+              <ul>{page.deliverables.map((item) => <li>{item}</li>)}</ul>
+            </article>
+            <article data-reveal>
+              <span>TECH / SYSTEMS</span>
+              <ul>{page.tech.map((item) => <li>{item}</li>)}</ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {depth && (
+        <section class="section service-depth" data-status-section>
+          <div class="section-inner">
+            <p class="section-kicker" data-reveal>Fit / boundaries</p>
+            <h2 class="section-title section-title--offers" data-reveal>Когда нужен этот контур — и где его границы.</h2>
+            <div class="service-columns service-columns--depth">
+              <article data-reveal>
+                <span>WHEN IT FITS</span>
+                {depth.whenNeeded.map((item) => <p>{item}</p>)}
+              </article>
+              <article data-reveal>
+                <span>WORK MODEL</span>
+                <p>{depth.workModel}</p>
+                <span>LIMITS</span>
+                <p>{depth.constraints}</p>
+              </article>
+            </div>
+            <div class="service-columns service-columns--depth">
+              <article data-reveal>
+                <span>CLIENT INPUTS</span>
+                <ul>{depth.clientInputs.map((item) => <li>{item}</li>)}</ul>
+              </article>
+              <article data-reveal>
+                <span>ACCEPTANCE</span>
+                <ul>{depth.acceptance.map((item) => <li>{item}</li>)}</ul>
+              </article>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section class="section service-faq" data-status-section>
+        <div class="section-inner">
+          <p class="section-kicker" data-reveal>FAQ</p>
+          <h2 class="section-title section-title--method" data-reveal>Коротко о внедрении.</h2>
+          <div class="faq-grid">
+            {page.faq.map(([question, answer]) => (
+              <article data-reveal>
+                <h3>{question}</h3>
+                <p>{answer}</p>
+              </article>
+            ))}
+          </div>
+          <div class="service-final-cta" data-reveal>
+            <span>CREATE PROJECT REQUEST</span>
+            <b>Покажите процесс, который нужно вернуть под контроль.</b>
+            <a class="button button--primary" href={`/contact/?service=${page.slug}`}>Запустить разбор процесса</a>
+          </div>
+          <div class="service-related" data-reveal>
+            <span>RELATED EDITORIAL RESEARCH</span>
+            {relatedScenarios.map((study) => <a href={`/cases/${study.slug}/`}><b>{study.title}</b><small>{study.sector} →</small></a>)}
+            <a href="/cases/"><b>Все 50 сценариев</b><small>EDITORIAL RESEARCH →</small></a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="service-legal" aria-label="Реквизиты IT WHITE">
+      <span>© 2026 IT WHITE</span>
+      <span>ИП Белый В.М. / ИНН 772333809099 / ОГРНИП 323774600178142</span>
+      <LegalLinks />
+      <a href={`/contact/?service=${page.slug}`}>Обсудить проект</a>
+    </footer>
+  </div>
+</BaseLayout>

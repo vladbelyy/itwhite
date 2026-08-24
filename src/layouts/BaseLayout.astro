@@ -1,0 +1,92 @@
+---
+import "../styles/global.css";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/inter-tight";
+import "@fontsource-variable/jetbrains-mono";
+import interCyrillicUrl from "@fontsource-variable/inter/files/inter-cyrillic-wght-normal.woff2?url";
+import interTightCyrillicUrl from "@fontsource-variable/inter-tight/files/inter-tight-cyrillic-wght-normal.woff2?url";
+import CookieNotice from "../components/legal/CookieNotice.astro";
+import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VERSION } from "../lib/cookie-notice";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = "/images/editorial/editorial-w-v1.webp",
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  noindex = false
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large"} />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href={interTightCyrillicUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={interCyrillicUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="IT WHITE" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={socialImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:alt" content="IT WHITE — системы управления для бизнеса" />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage.href} />
+    <meta name="theme-color" content="#F2F1EC" />
+    <script is:inline define:vars={{ cookieNoticeKey: COOKIE_NOTICE_KEY, cookieNoticeVersion: COOKIE_NOTICE_VERSION }}>
+      try {
+        if (localStorage.getItem(cookieNoticeKey) === cookieNoticeVersion) {
+          document.documentElement.dataset.cookieNoticeSeen = "true";
+        }
+      } catch {}
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#top">Перейти к основному содержанию</a>
+    <slot />
+    <CookieNotice />
+    <script>
+      import { trackGoal } from "../lib/analytics";
+
+      document.addEventListener("click", (event) => {
+        const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+        if (!link) return;
+        const href = link.getAttribute("href") || "";
+        const context = { href, page: window.location.pathname, label: link.textContent?.trim().slice(0, 120) || "" };
+        if (href.includes("t.me/")) trackGoal("telegram_click", context);
+        if (href === "#contact" || href === "/#contact" || href.startsWith("/contact/")) trackGoal("contact_cta_click", context);
+        if (/^\/cases\/[^/]+\/$/.test(href)) trackGoal("case_open", context);
+      });
+    </script>
+  </body>
+</html>
