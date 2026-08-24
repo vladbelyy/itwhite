@@ -65,6 +65,12 @@ export const solutionGroups = [
 
 export const supportingCapabilities = [
   {
+    code: "TECH / ARCHITECTURE",
+    title: "Технический консалтинг и архитектура",
+    href: "/technical-consulting/",
+    summary: "Независимо проверяем архитектуру, код, инфраструктуру, данные и эксплуатационные риски до модернизации, крупной инвестиции или смены подрядчика."
+  },
+  {
     code: "DATA / RELIABILITY",
     title: "Интеграции, безопасность и данные",
     href: "/security-data/",

@@ -10,16 +10,14 @@
 - [Verified work](https://itwhite.ru/work/) - owned production contours separated from client case claims.
 - [Company](https://itwhite.ru/about/) - team responsibilities and evidence rules.
 - [Insights](https://itwhite.ru/insights/) - editorial research, clearly separated from delivered client work.
+- [Process automation](https://itwhite.ru/process-automation/) - automation of repeatable business processes with explicit owners, events, integrations, exception handling, and recovery paths.
 - [Business process audit](https://itwhite.ru/business-process-audit/) - process map, loss points, risks, solution architecture, and preliminary budget.
 - [Formats and pricing](https://itwhite.ru/formats/) - Diagnose, Launch, and Operate entry formats for process diagnostics, first control contours, and support.
 - [IT WHITE Control](https://itwhite.ru/it-white-control/) - flagship control system for leads, SLA, responsible owners, and next actions.
 - [Lost leads control](https://itwhite.ru/lost-leads/) - decision guide for finding and controlling lead loss between channels, CRM, owners, and SLA.
-- [AI in operations](https://itwhite.ru/ai-automation/) - decision guide for embedding AI into a controlled business process with verification and human responsibility.
-- [Internal business system](https://itwhite.ru/internal-tools/) - decision guide for replacing fragmented tables and chats with a role-based operational system.
 - [Security and data](https://itwhite.ru/security-data/) - access, data boundaries, audit trails, backup, recovery, and AI data handling.
-- [Diagnose format](https://itwhite.ru/formats/) - process map, risk register, architecture options, and implementation decision.
 - [CRM automation](https://itwhite.ru/crm-automation/) - CRM automation, lead control, SLA monitoring, notifications, and integrations.
-- [AI automation](https://itwhite.ru/ai-automation/) - AI tools for sales, support, operations, document workflows, and knowledge systems.
+- [Controlled AI automation](https://itwhite.ru/ai-automation/) - AI tools embedded in sales, support, operations, document workflows, and knowledge systems with verification and human responsibility.
 - [Custom product development](https://itwhite.ru/custom-product-development/) - Internal platforms, client portals, micro-SaaS MVPs, and custom product solutions.
 - [Bitrix24 automation](https://itwhite.ru/bitrix24-automation/) - Bitrix24 integrations, webhooks, robots, external logic, and AI lead control.
 - [Internal tools](https://itwhite.ru/internal-tools/) - Dashboards, internal panels, service interfaces, calculators, and operational tools.

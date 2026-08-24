@@ -26,6 +26,12 @@ Intended process outcomes, subject to measurement in each implementation:
 
 ## Services
 
+### Business process automation
+
+IT WHITE automates repeatable business processes after roles, events, completion criteria, exception handling, and a manual recovery path have been agreed. Deterministic rules are preferred where AI is unnecessary.
+
+Canonical page: https://itwhite.ru/process-automation/
+
 ### Business process audit
 
 IT WHITE audits sales, CRM, data, integrations, and operational processes to find where the business loses speed, money, safety, and control.
@@ -50,7 +56,7 @@ IT WHITE designs CRM automation, SLA control, notifications, widgets, external l
 
 Canonical page: https://itwhite.ru/crm-automation/
 
-### AI automation
+### Controlled AI automation
 
 IT WHITE embeds AI into actual operations: dialogue analysis, lead classification, document preparation, knowledge bases, quality control, and context analysis. AI is used only where it is more useful than deterministic code.
 

@@ -39,12 +39,17 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
 ---
 
 <nav class:list={["side-nav", "corporate-navigation", { "corporate-navigation--dark": theme === "dark" }]} aria-label="Основная навигация" data-corporate-navigation>
-  <a class="side-nav__brand" href="/#top">IT WHITE / 2026</a>
-  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/" }]} href="/" aria-current={currentPath === "/" ? "page" : undefined}>Главная</a>
+  <a class="side-nav__brand" href="/#top">
+    <span>IT WHITE</span>
+    <small>Systems studio</small>
+  </a>
+  <div class="side-nav__availability"><i aria-hidden="true"></i><span>Принимаем проекты</span></div>
+  <div class="side-nav__primary">
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/" }]} href="/" aria-current={currentPath === "/" ? "page" : undefined}><small>01</small><span>Главная</span></a>
 
   <details class="corporate-navigation__group">
     <summary aria-expanded="false">
-      <span>Решения</span><span aria-hidden="true">+</span>
+      <span><small>02</small>Решения</span><span aria-hidden="true">+</span>
     </summary>
     <div class="corporate-navigation__dropdown">
       <a class:list={{ "is-active": currentPath === "/solutions/" }} href="/solutions/" aria-current={currentPath === "/solutions/" ? "page" : undefined}>Все решения</a>
@@ -56,7 +61,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
 
   <details class="corporate-navigation__group">
     <summary aria-expanded="false">
-      <span>Продукты</span><span aria-hidden="true">+</span>
+      <span><small>03</small>Продукты</span><span aria-hidden="true">+</span>
     </summary>
     <div class="corporate-navigation__dropdown">
       <a class:list={{ "is-active": currentPath === "/products/" }} href="/products/" aria-current={currentPath === "/products/" ? "page" : undefined}>Все продукты</a>
@@ -66,22 +71,30 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
     </div>
   </details>
 
-  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/work/" || currentPath.startsWith("/work/") }]} href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}>Внедрения</a>
-  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/insights/" || currentPath.startsWith("/insights/") }]} href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}>Материалы</a>
-  <a class:list={["corporate-navigation__link", { "is-active": isCurrent("/formats/") }]} href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы</a>
-  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/about/" || currentPath.startsWith("/about/") }]} href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О нас</a>
-  <a class:list={["corporate-navigation__cta", { "is-active": currentPath === "/contact/" }]} href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}>Разобрать процесс</a>
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/work/" || currentPath.startsWith("/work/") }]} href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}><small>04</small><span>Внедрения</span></a>
+  <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/insights/" || currentPath.startsWith("/insights/") }]} href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}><small>05</small><span>Материалы</span></a>
+  </div>
+  <div class="side-nav__secondary">
+    <a class:list={["corporate-navigation__link", { "is-active": isCurrent("/formats/") }]} href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы работы</a>
+    <a class:list={["corporate-navigation__link", { "is-active": currentPath === "/about/" || currentPath.startsWith("/about/") }]} href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О студии</a>
+  </div>
+  <a class:list={["corporate-navigation__cta", { "is-active": currentPath === "/contact/" }]} href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}><span>Разобрать процесс</span><small>Начать с задачи →</small></a>
 </nav>
 
 <header class="mobile-header corporate-navigation" data-corporate-navigation>
-  <a href="/#top">IT WHITE</a>
+  <a class="mobile-header__brand" href="/#top"><b>IT WHITE</b><span>Systems studio</span></a>
+  <span class="mobile-header__status"><i aria-hidden="true"></i>Online</span>
   <details class="mobile-menu">
-    <summary aria-expanded="false">Меню</summary>
+    <summary aria-expanded="false"><span>Меню</span><i aria-hidden="true"></i></summary>
     <nav aria-label="Мобильная навигация">
-      <a href="/" aria-current={currentPath === "/" ? "page" : undefined}>Главная</a>
+      <div class="mobile-menu__intro">
+        <span>Навигация / IT WHITE</span>
+        <b>Системы, которые возвращают процесс под контроль.</b>
+      </div>
+      <a class="mobile-menu__home" href="/" aria-current={currentPath === "/" ? "page" : undefined}><small>01</small>Главная</a>
 
       <details class="mobile-menu__group" open={solutionIsCurrent}>
-        <summary aria-expanded={solutionIsCurrent ? "true" : "false"}>Решения</summary>
+        <summary aria-expanded={solutionIsCurrent ? "true" : "false"}><span><small>02</small>Решения</span></summary>
         <div>
           <a href="/solutions/" aria-current={currentPath === "/solutions/" ? "page" : undefined}>Все решения</a>
           {solutionLinks.map((item) => (
@@ -91,7 +104,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
       </details>
 
       <details class="mobile-menu__group" open={productIsCurrent}>
-        <summary aria-expanded={productIsCurrent ? "true" : "false"}>Продукты</summary>
+        <summary aria-expanded={productIsCurrent ? "true" : "false"}><span><small>03</small>Продукты</span></summary>
         <div>
           <a href="/products/" aria-current={currentPath === "/products/" ? "page" : undefined}>Все продукты</a>
           {productLinks.map((item) => (
@@ -100,11 +113,11 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
         </div>
       </details>
 
-      <a href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}>Внедрения</a>
-      <a href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}>Материалы</a>
+      <a href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}><small>04</small>Внедрения</a>
+      <a href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}><small>05</small>Материалы</a>
       <a href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы работы</a>
-      <a href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О нас</a>
-      <a href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}>Разобрать процесс</a>
+      <a href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О студии</a>
+      <a class="mobile-menu__cta" href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}><span>Разобрать процесс</span><small>Расскажите, где теряется контроль →</small></a>
     </nav>
   </details>
 </header>
@@ -173,8 +186,38 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   document.querySelectorAll<HTMLDetailsElement>(".mobile-menu").forEach((menu) => {
+    const trigger = menu.querySelector<HTMLElement>(":scope > summary");
+    const drawer = menu.querySelector<HTMLElement>(":scope > nav");
+    const syncMenuState = () => {
+      document.documentElement.classList.toggle("mobile-menu-open", menu.open);
+      if (!menu.open) return;
+      drawer?.querySelector<HTMLElement>("a, summary")?.focus();
+    };
+
+    menu.addEventListener("toggle", syncMenuState);
     menu.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
       link.addEventListener("click", () => { menu.open = false; });
+    });
+
+    menu.addEventListener("keydown", (event) => {
+      if (!menu.open || event.key !== "Tab" || !drawer) return;
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>("a[href], summary:not([disabled])"));
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    menu.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !menu.open) return;
+      menu.open = false;
+      trigger?.focus();
     });
   });
 </script>
@@ -185,12 +228,12 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .corporate-navigation__group > summary {
-    min-height: 24px;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     list-style: none;
   }
@@ -202,7 +245,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
 
   .corporate-navigation__group[open] > summary,
   .corporate-navigation__group > summary:hover {
-    color: var(--ink);
+    color: white;
   }
 
   .corporate-navigation__group[open] > summary span:last-child {
@@ -210,17 +253,15 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .corporate-navigation__dropdown {
-    position: absolute;
-    z-index: 75;
-    top: calc(100% + 7px);
-    left: 0;
-    width: 248px;
+    position: static;
+    width: 100%;
     display: grid;
     gap: 1px;
+    margin: 2px 0 6px;
     padding: 1px;
-    border: 1px solid var(--ink);
-    background: var(--line);
-    box-shadow: 12px 16px 0 rgba(17, 17, 17, 0.08);
+    border: 1px solid rgba(255,255,255,.18);
+    background: var(--dark);
+    box-shadow: none;
   }
 
   .corporate-navigation__dropdown a {
@@ -228,14 +269,14 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
     min-height: 42px;
     display: flex;
     align-items: center;
-    padding: 10px 12px;
-    background: var(--paper);
-    color: var(--muted);
+    padding: 9px 10px;
+    background: var(--dark);
+    color: rgba(255,255,255,.68);
   }
 
   .corporate-navigation__dropdown a:hover,
   .corporate-navigation__dropdown a.is-active {
-    background: var(--ink);
+    background: rgba(255,255,255,.08);
     color: white;
     transform: none;
   }
@@ -245,13 +286,20 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .corporate-navigation__cta {
-    min-height: 38px !important;
-    display: inline-flex;
-    align-items: center;
-    padding: 0 12px;
+    min-height: 72px !important;
+    display: grid;
+    align-content: center;
+    gap: 5px;
+    padding: 12px 14px;
     background: var(--signal);
     color: white !important;
     font-weight: 700;
+  }
+
+  .corporate-navigation__cta small {
+    font-size: 9px;
+    font-weight: 500;
+    opacity: .72;
   }
 
   .corporate-navigation--dark .side-nav__brand,
@@ -280,7 +328,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .mobile-menu nav {
-    max-height: calc(100svh - 94px);
+    max-height: calc(100svh - 64px);
     overflow-y: auto;
   }
 
@@ -289,13 +337,14 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 20px;
     border-bottom: 1px solid var(--line);
     cursor: pointer;
     list-style: none;
     font-family: var(--mono);
-    font-size: 12px;
-    text-transform: uppercase;
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 760;
   }
 
   .mobile-menu__group > summary::after {
@@ -307,7 +356,7 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
   }
 
   .mobile-menu__group > div a {
-    padding-left: 32px;
+    padding-left: 44px;
     background: var(--surface);
   }
 

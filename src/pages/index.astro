@@ -1,34 +1,40 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Navigation from "../components/layout/Navigation.astro";
-import StatusBar from "../components/layout/StatusBar";
-import { SystemLayer } from "../components/interactive/SystemLayer";
-import HeroEventLog from "../components/hero/HeroEventLog";
 import ProjectForm from "../components/forms/ProjectForm";
 import LegalLinks from "../components/legal/LegalLinks.astro";
 import { commercialEntries, products } from "../data/site";
 import { servicePages } from "../data/servicePages";
 import { caseStudies } from "../data/caseStudies";
+import { redirectedServiceSlugs } from "../lib/sitemap-governance";
 
 const title = "IT WHITE - технологический консалтинг и внутренние системы";
 const description = "Проектируем, внедряем и сопровождаем внутренние системы, CRM-контроль, AI-инструменты, интеграции и продуктовые решения под реальные процессы бизнеса.";
 const telegramUrl = import.meta.env.PUBLIC_TELEGRAM_URL || "https://t.me/rgvldi";
-const coreSolutionAreas = [
-  { label: "LOST LEADS CONTROL", slug: "lost-leads", title: "Теряются заявки", text: "Показываем, где обращение выпадает между каналом, CRM, ответственным и следующим действием.", result: "RESULT: источник, SLA, владелец и исключение видны в одном процессе" },
-  { label: "AI IN OPERATIONS", slug: "ai-in-operations", title: "AI нужен внутри процесса", text: "Отделяем полезную работу модели от демонстрационного бота и задаём контекст, проверку и границы ответственности.", result: "RESULT: AI готовит или выполняет конкретное действие, а решение остаётся проверяемым" },
-  { label: "INTERNAL BUSINESS SYSTEM", slug: "internal-business-system", title: "Таблицы больше не справляются", text: "Собираем роли, данные и обязательные действия в одном рабочем интерфейсе поверх существующих сервисов.", result: "RESULT: команда работает в едином контуре, руководитель видит исключения" }
+const homeDirections = [
+  { code: "01", slug: "process-automation", title: "Автоматизация процессов", text: "Находим ручные разрывы и собираем управляемый маршрут действий." },
+  { code: "02", slug: "crm-automation", title: "CRM и Bitrix24", text: "Настраиваем контроль заявок, SLA, ответственных и интеграций." },
+  { code: "03", slug: "internal-tools", title: "Внутренние системы", text: "Создаём рабочие кабинеты и панели поверх существующих данных." },
+  { code: "04", slug: "ai-automation", title: "Контролируемый AI", text: "Встраиваем модели туда, где результат можно проверить и остановить." },
+  { code: "05", slug: "technical-consulting", title: "Технический консалтинг", text: "Проверяем архитектуру, код, инфраструктуру и риски до изменений." },
+  { code: "06", slug: "custom-product-development", title: "Заказная разработка", text: "Проектируем продукт вокруг процесса, ролей и критериев приёмки." }
 ];
+const canonicalServicePages = servicePages.filter((page) => !redirectedServiceSlugs.has(page.slug));
+const homeUrl = "https://itwhite.ru/";
+const websiteId = `${homeUrl}#website`;
+const webpageId = `${homeUrl}#webpage`;
+const organizationId = `${homeUrl}#organization`;
 
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://itwhite.ru/#organization",
+      "@id": organizationId,
       name: "IT WHITE",
       legalName: "ИП Белый В.М.",
       taxID: "772333809099",
-      url: "https://itwhite.ru",
+      url: homeUrl,
       email: "mailto:info@itwhite.ru",
       employee: [
         { "@id": "https://itwhite.ru/#vladislav-bely" },
@@ -47,16 +53,29 @@ const schema = {
         "AI automation",
         "Bitrix24",
         "Avito analytics",
+        "business process automation",
+        "technology consulting",
         "internal tools",
         "custom product development"
       ]
     },
     {
       "@type": "WebSite",
-      "@id": "https://itwhite.ru/#website",
+      "@id": websiteId,
       name: "IT WHITE",
-      url: "https://itwhite.ru",
-      publisher: { "@id": "https://itwhite.ru/#organization" },
+      url: homeUrl,
+      publisher: { "@id": organizationId },
+      inLanguage: "ru-RU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": webpageId,
+      url: homeUrl,
+      name: title,
+      description,
+      isPartOf: { "@id": websiteId },
+      about: { "@id": organizationId },
+      mainEntity: { "@id": `${homeUrl}#technical-consulting-service` },
       inLanguage: "ru-RU"
     },
     {
@@ -65,7 +84,7 @@ const schema = {
       name: "Владислав Белый",
       jobTitle: "Product & Engineering Partner",
       image: "https://itwhite.ru/images/team/vladislav-bely-editorial-v1.webp",
-      worksFor: { "@id": "https://itwhite.ru/#organization" }
+      worksFor: { "@id": organizationId }
     },
     {
       "@type": "Person",
@@ -73,29 +92,32 @@ const schema = {
       name: "Денис Кораблёв",
       jobTitle: "Business & Delivery Partner",
       image: "https://itwhite.ru/images/team/denis-korablev-editorial-v1.webp",
-      worksFor: { "@id": "https://itwhite.ru/#organization" }
+      worksFor: { "@id": organizationId }
     },
     {
       "@type": "Service",
+      "@id": `${homeUrl}#technical-consulting-service`,
       name: "Технологический консалтинг и разработка внутренних систем",
-      provider: { "@id": "https://itwhite.ru/#organization" },
-      areaServed: "RU"
-    },
-    {
-      "@type": "Service",
-      name: "Разработка продуктов под бизнес-задачу",
-      provider: { "@id": "https://itwhite.ru/#organization" },
-      areaServed: "RU"
-    },
-    ...servicePages.map((page) => ({
-      "@type": "Service",
-      name: page.title,
-      description: page.description,
-      provider: { "@id": "https://itwhite.ru/#organization" },
+      description,
+      provider: { "@id": organizationId },
       areaServed: "RU",
-      url: `https://itwhite.ru/${page.slug}/`,
-      serviceType: page.label
-    })),
+      url: homeUrl,
+      mainEntityOfPage: { "@id": webpageId }
+    },
+    ...canonicalServicePages.map((page) => {
+      const pageUrl = `https://itwhite.ru/${page.slug}/`;
+      return {
+        "@type": "Service",
+        "@id": `${pageUrl}#service`,
+        name: page.title,
+        description: page.description,
+        provider: { "@id": organizationId },
+        areaServed: "RU",
+        url: pageUrl,
+        mainEntityOfPage: pageUrl,
+        serviceType: page.label
+      };
+    }),
     ...products.map((product) => ({
       "@type": "SoftwareApplication",
       name: product.name,
@@ -111,33 +133,49 @@ const schema = {
   <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
   <div class="page-shell">
     <Navigation />
-    <SystemLayer client:idle />
-    <StatusBar client:idle />
 
     <main id="top" tabindex="-1">
       <section id="intro" class="section hero" aria-labelledby="hero-title" data-status-section>
         <div class="section-inner hero__content">
-          <div>
-            <p class="section-kicker" data-reveal>Product engineering agency / Business control systems</p>
-            <h1 id="hero-title" data-reveal>Бизнес не должен держаться на памяти сотрудников.</h1>
-            <p class="hero__lead" data-reveal>Мы находим разрывы между продажами, CRM, данными и действиями команды — и создаём системы, которые возвращают процесс под контроль.</p>
-            <div class="hero__thesis" data-reveal>
-              <span>POSITION</span>
-              <b>Если процесс устроен слабо, говорим об этом прямо и предлагаем новую логику.</b>
-            </div>
+          <div class="hero__copy">
+            <p class="section-kicker">Системы управления для бизнеса</p>
+            <h1 id="hero-title">Бизнес не должен держаться на памяти сотрудников.</h1>
+            <p class="hero__lead">Находим разрывы между продажами, CRM, данными и командой. Затем создаём систему, которая замечает проблему и возвращает действие ответственному.</p>
             <div class="hero__actions">
-              <a class="button button--primary" href="/contact/?service=process-review" data-cursor="START">Разобрать проблемный процесс</a>
-              <a class="button" href="/work/" data-cursor="OPEN">Посмотреть подтверждённые внедрения</a>
-            </div>
-            <div class="hero-proof-strip" aria-label="Ключевые факты об IT WHITE" data-reveal>
-              <span><b>03</b> внутренних продуктовых контура</span>
-              <span><b>50</b> исследовательских карт процессов</span>
-              <span><b>02</b> партнёра ведут проект без передачи</span>
+              <a class="button button--primary" href="/contact/?service=process-review" data-cursor="START">Разобрать процесс</a>
+              <a class="hero__work-link" href="/work/" data-cursor="OPEN">Посмотреть рабочие контуры <span aria-hidden="true">↗</span></a>
             </div>
           </div>
-          <HeroEventLog client:idle />
+          <aside class="hero-route" aria-label="Как система возвращает процесс под контроль">
+            <div class="hero-route__head"><span>CONTROL ROUTE / 01</span><b>Событие не потеряно</b></div>
+            <ol>
+              <li><span>01</span><div><b>Сигнал</b><small>обращение или отклонение</small></div></li>
+              <li><span>02</span><div><b>Проверка</b><small>контекст и правила</small></div></li>
+              <li><span>03</span><div><b>Ответственный</b><small>роль и срок реакции</small></div></li>
+              <li><span>04</span><div><b>Действие</b><small>возвращено в процесс</small></div></li>
+            </ol>
+            <p><i aria-hidden="true"></i> Контур работает поверх CRM, сервисов и данных компании.</p>
+          </aside>
         </div>
-        <div class="hero__graph" aria-hidden="true"></div>
+      </section>
+
+      <section class="section section--directions" aria-labelledby="directions-title" data-status-section data-nav-current="systems">
+        <div class="section-inner">
+          <div class="directions-head">
+            <p class="section-kicker">Направления / 06</p>
+            <h2 id="directions-title">Что можно вернуть под контроль.</h2>
+            <p>Начинаем не с технологии, а с места, где процесс теряет деньги, время или управляемость.</p>
+          </div>
+          <div class="direction-list">
+            {homeDirections.map((direction) => (
+              <a href={`/${direction.slug}/`}>
+                <span>{direction.code}</span>
+                <div><h3>{direction.title}</h3><p>{direction.text}</p></div>
+                <b aria-hidden="true">↗</b>
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section id="problem" class="section section--problem" data-status-section>
@@ -304,27 +342,6 @@ const schema = {
           </div>
         </div>
       </section>
-
-      <section class="section section--solutions" data-status-section data-nav-current="systems">
-        <div class="section-inner">
-          <p class="section-kicker" data-reveal>What we build</p>
-          <h2 class="section-title section-title--solutions" data-reveal>Три направления, с которых обычно начинается работа.</h2>
-          <p class="section-copy" data-reveal>Главная задача не в том, чтобы “сделать IT”. Мы закрепляем правильную логику работы в CRM, внутреннем сервисе или продуктовой системе.</p>
-          <div class="solution-grid">
-            {coreSolutionAreas.map((area) => (
-              <article class="solution-card" data-reveal>
-                <span>{area.label}</span>
-                <h3>{area.title}</h3>
-                <p>{area.text}</p>
-                <small>{area.result}</small>
-                <a href={`/${area.slug}/`}>Открыть направление →</a>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      
 
       <section class="section section--proof" data-status-section data-nav-current="systems">
         <div class="section-inner">

@@ -86,6 +86,7 @@ const directionBySlug: Record<string, DirectionProfile> = {
   "it-white-control": directionProfiles[1],
   "internal-tools": directionProfiles[2],
   "custom-product-development": directionProfiles[2],
+  "technical-consulting": directionProfiles[2],
   "ai-automation": directionProfiles[3]
 };
 
