@@ -10,6 +10,7 @@ const monorepoRoot = path.resolve(dirname, '../..')
 const nextConfig: NextConfig = {
   output: 'standalone',
   outputFileTracingRoot: monorepoRoot,
+  poweredByHeader: false,
   images: {
     localPatterns: [
       {

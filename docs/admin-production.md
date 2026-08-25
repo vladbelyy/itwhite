@@ -27,6 +27,8 @@ The generated bootstrap credentials are stored only in `/root/itwhite-admin-boot
 
 Do not use Postgres schema push in production. Do not expose Payload's first-user page before the server-side seed succeeds. IndexNow is sent only after a public Astro release, never directly from a CMS draft or publish action.
 
+The edge blocks both first-user registration and password-reset routes. Keep password reset closed until a production email adapter is configured; Payload's console email fallback must never become a recovery channel on a public service.
+
 ## Standalone artifact
 
 Copy the contents of `apps/admin/.next/standalone/` to the release root without flattening the monorepo tree. Then copy `apps/admin/.next/static/` to `<release>/apps/admin/.next/static/`. The systemd unit starts `<release>/apps/admin/server.js`.

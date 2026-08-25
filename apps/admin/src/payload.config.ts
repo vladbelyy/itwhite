@@ -49,10 +49,12 @@ export default buildConfig({
   collections: [Users, Leads, Media, Sources, Cases, Insights],
   cors: [adminOrigin],
   csrf: [adminOrigin],
+  defaultDepth: 1,
   editor: restrictedEditor,
   graphQL: {
     disable: true,
   },
+  maxDepth: 5,
   secret: requiredEnv('PAYLOAD_SECRET'),
   serverURL: process.env.NODE_ENV === 'production' ? productionOrigin : adminOrigin,
   typescript: {
@@ -83,5 +85,6 @@ export default buildConfig({
     uploadTimeout: 30_000,
   },
   sharp,
+  telemetry: false,
   plugins: [],
 })
