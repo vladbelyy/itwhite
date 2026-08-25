@@ -29,6 +29,8 @@ Do not use Postgres schema push in production. Do not expose Payload's first-use
 
 The edge blocks both first-user registration and password-reset routes. Keep password reset closed until a production email adapter is configured; Payload's console email fallback must never become a recovery channel on a public service.
 
+Nginx consumes the outer Basic Auth header and must clear `Authorization` before proxying to Payload, otherwise it masks Payload's cookie authentication. The proxy also enforces `Secure`, `HttpOnly`, and `SameSite=Strict` on upstream cookies.
+
 ## Standalone artifact
 
 Copy the contents of `apps/admin/.next/standalone/` to the release root without flattening the monorepo tree. Then copy `apps/admin/.next/static/` to `<release>/apps/admin/.next/static/`. The systemd unit starts `<release>/apps/admin/server.js`.
