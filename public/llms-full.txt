@@ -1,6 +1,6 @@
 # IT WHITE - full AI-readable summary
 
-IT WHITE is a technology consultancy and product engineering company for internal systems, operational automation, CRM control, AI tools, analytics, integrations, and custom product development.
+IT WHITE is a technology consultancy and product engineering company for technical consulting, internal systems, operational automation, CRM control, AI tools, analytics, integrations, and custom product development.
 
 The agency position:
 
@@ -37,6 +37,12 @@ Canonical page: https://itwhite.ru/process-automation/
 IT WHITE audits sales, CRM, data, integrations, and operational processes to find where the business loses speed, money, safety, and control.
 
 Canonical page: https://itwhite.ru/business-process-audit/
+
+### Technical IT consulting
+
+IT WHITE independently reviews system architecture, selected code and data paths, infrastructure, delivery practices, observability, and operational risks before modernization, a major development stage, technical due diligence, or a change of contractor. Findings are tied to observed evidence, business impact, and a next verifiable action. The review is not presented as certification, a full penetration test, or a guarantee of performance.
+
+Canonical page: https://itwhite.ru/technical-consulting/
 
 ### Formats and pricing
 

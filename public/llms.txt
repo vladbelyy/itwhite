@@ -12,6 +12,7 @@
 - [Insights](https://itwhite.ru/insights/) - editorial research, clearly separated from delivered client work.
 - [Process automation](https://itwhite.ru/process-automation/) - automation of repeatable business processes with explicit owners, events, integrations, exception handling, and recovery paths.
 - [Business process audit](https://itwhite.ru/business-process-audit/) - process map, loss points, risks, solution architecture, and preliminary budget.
+- [Technical IT consulting](https://itwhite.ru/technical-consulting/) - independent review of architecture, code, infrastructure, data, delivery risks, and modernization options, with evidence and stated limitations.
 - [Formats and pricing](https://itwhite.ru/formats/) - Diagnose, Launch, and Operate entry formats for process diagnostics, first control contours, and support.
 - [IT WHITE Control](https://itwhite.ru/it-white-control/) - flagship control system for leads, SLA, responsible owners, and next actions.
 - [Lost leads control](https://itwhite.ru/lost-leads/) - decision guide for finding and controlling lead loss between channels, CRM, owners, and SLA.

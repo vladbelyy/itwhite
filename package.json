@@ -10,6 +10,9 @@
     "audit:cases": "node scripts/audit-case-library.mjs",
     "audit:design": "node scripts/audit-design-system.mjs",
     "test:critical": "node scripts/test-critical-flows.mjs",
+    "test:indexnow": "node scripts/test-indexnow.mjs",
+    "indexnow:dry": "node scripts/submit-indexnow.mjs",
+    "indexnow:submit": "node scripts/submit-indexnow.mjs --submit",
     "preview": "astro preview --host 0.0.0.0",
     "check": "panda codegen && astro check"
   },
