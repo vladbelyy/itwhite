@@ -6,5 +6,6 @@
       "@/*": ["src/*"],
       "styled-system/*": ["styled-system/*"]
     }
-  }
+  },
+  "exclude": ["apps/admin", "dist", "node_modules", "styled-system"]
 }

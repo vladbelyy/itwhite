@@ -1,0 +1,40 @@
+[Unit]
+Description=IT WHITE Payload Admin
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=itwhite-admin
+Group=itwhite-admin
+WorkingDirectory=/var/www/itwhite-admin/current
+EnvironmentFile=/etc/itwhite-admin.env
+ExecStart=/usr/bin/node /var/www/itwhite-admin/current/server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=90
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0027
+
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=full
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+MemoryMax=1G
+TasksMax=256
+
+[Install]
+WantedBy=multi-user.target
