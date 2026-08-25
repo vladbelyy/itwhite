@@ -29,6 +29,6 @@ Do not use Postgres schema push in production. Do not expose Payload's first-use
 
 ## Standalone artifact
 
-Copy the contents of `apps/admin/.next/standalone/` to the release root. Then copy `apps/admin/.next/static/` to `<release>/.next/static/`. The systemd unit starts `<release>/server.js`.
+Copy the contents of `apps/admin/.next/standalone/` to the release root without flattening the monorepo tree. Then copy `apps/admin/.next/static/` to `<release>/apps/admin/.next/static/`. The systemd unit starts `<release>/apps/admin/server.js`.
 
 Rollback is an atomic `current` symlink switch followed by `systemctl restart itwhite-admin`. If a migration is not backwards compatible, restore the pre-migration dump into an isolated database and switch the database only after validation.

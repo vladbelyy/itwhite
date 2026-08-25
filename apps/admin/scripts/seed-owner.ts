@@ -63,3 +63,5 @@ try {
 } finally {
   await payload.db.destroy?.()
 }
+
+process.exit(0)

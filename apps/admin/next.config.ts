@@ -5,9 +5,11 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
+const monorepoRoot = path.resolve(dirname, '../..')
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  outputFileTracingRoot: monorepoRoot,
   images: {
     localPatterns: [
       {
@@ -25,7 +27,7 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   turbopack: {
-    root: path.resolve(dirname),
+    root: monorepoRoot,
   },
 }
 

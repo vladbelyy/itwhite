@@ -35,6 +35,5 @@ The command exits when required variables are absent, refuses short passwords, a
 - Set `DATABASE_POOL_MAX=3` unless the PostgreSQL connection budget is deliberately changed.
 - Run migrations before swapping the release: `pnpm --filter @itwhite/admin payload migrate`.
 - Build with `pnpm --filter @itwhite/admin build`.
-- The standalone runtime entrypoint is `.next/standalone/server.js`. Copy `.next/static` into `.next/standalone/.next/static` and `public` into `.next/standalone/public` when preparing the release.
+- The monorepo standalone runtime entrypoint is `.next/standalone/apps/admin/server.js`. Preserve the complete standalone tree and copy `.next/static` into `.next/standalone/apps/admin/.next/static` when preparing the release.
 - Verify `GET /api/health` returns only `{"status":"ok"}` before routing traffic.
-
