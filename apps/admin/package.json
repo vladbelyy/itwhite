@@ -14,6 +14,7 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "seed:owner": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/seed-owner.ts",
+    "test:lead-pipeline": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/test-lead-pipeline.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start --hostname 127.0.0.1 --port 4323",
     "start:production": "cross-env NODE_OPTIONS=--no-deprecation HOSTNAME=127.0.0.1 PORT=4323 node .next/standalone/apps/admin/server.js",
     "typecheck": "tsc --noEmit"

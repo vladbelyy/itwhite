@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily IT WHITE admin backup
+
+[Timer]
+OnCalendar=*-*-* 02:35:00 Europe/Moscow
+Persistent=true
+RandomizedDelaySec=10m
+Unit=itwhite-admin-backup.service
+
+[Install]
+WantedBy=timers.target

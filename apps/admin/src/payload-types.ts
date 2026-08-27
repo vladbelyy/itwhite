@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     leads: Lead;
+    'lead-files': LeadFile;
     media: Media;
     sources: Source;
     cases: Case;
@@ -83,6 +84,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    'lead-files': LeadFilesSelect<false> | LeadFilesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     sources: SourcesSelect<false> | SourcesSelect<true>;
     cases: CasesSelect<false> | CasesSelect<true>;
@@ -106,6 +108,7 @@ export interface Config {
   user: User;
   jobs: {
     tasks: {
+      deliverLead: TaskDeliverLead;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -166,15 +169,27 @@ export interface User {
  */
 export interface Lead {
   id: number;
+  submissionId: string;
+  requestCode: string;
   name: string;
   company?: string | null;
+  contact: string;
   email?: string | null;
   phone?: string | null;
   topic?: string | null;
   message?: string | null;
-  status: 'new' | 'in_progress' | 'qualified' | 'closed' | 'rejected';
+  task: string;
+  systems?: string | null;
+  site?: string | null;
+  topics?: string[] | null;
+  diagnosis?: string | null;
+  status: 'new' | 'in_progress' | 'qualified' | 'closed' | 'rejected' | 'spam';
   source?: string | null;
+  originService?: string | null;
+  originScenario?: string | null;
   pageURL?: string | null;
+  landingPath?: string | null;
+  referrer?: string | null;
   utm?:
     | {
         [k: string]: unknown;
@@ -184,10 +199,45 @@ export interface Lead {
     | number
     | boolean
     | null;
+  attachment?: (number | null) | LeadFile;
   consentAccepted: boolean;
   consentAcceptedAt?: string | null;
+  consentVersion?: string | null;
+  privacyVersion?: string | null;
+  sessionId?: string | null;
+  ipHash?: string | null;
+  userAgent?: string | null;
+  deliveryStatus: 'queued' | 'processing' | 'retrying' | 'delivered' | 'partial' | 'dead_letter';
+  bitrixStatus?: ('not_configured' | 'pending' | 'delivered' | 'failed') | null;
+  telegramStatus?: ('not_configured' | 'pending' | 'delivered' | 'failed') | null;
+  bitrixLeadId?: string | null;
+  telegramMessageId?: string | null;
+  telegramAttachmentDelivered?: boolean | null;
+  deliveryAttempts?: number | null;
+  lastDeliveryError?: string | null;
+  deliveredAt?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-files".
+ */
+export interface LeadFile {
+  id: number;
+  originalName: string;
+  submissionId: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -403,7 +453,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: 'inline' | 'deliverLead' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -436,7 +486,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ('inline' | 'deliverLead' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -457,6 +507,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'lead-files';
+        value: number | LeadFile;
       } | null)
     | ({
         relationTo: 'media';
@@ -545,20 +599,66 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "leads_select".
  */
 export interface LeadsSelect<T extends boolean = true> {
+  submissionId?: T;
+  requestCode?: T;
   name?: T;
   company?: T;
+  contact?: T;
   email?: T;
   phone?: T;
   topic?: T;
   message?: T;
+  task?: T;
+  systems?: T;
+  site?: T;
+  topics?: T;
+  diagnosis?: T;
   status?: T;
   source?: T;
+  originService?: T;
+  originScenario?: T;
   pageURL?: T;
+  landingPath?: T;
+  referrer?: T;
   utm?: T;
+  attachment?: T;
   consentAccepted?: T;
   consentAcceptedAt?: T;
+  consentVersion?: T;
+  privacyVersion?: T;
+  sessionId?: T;
+  ipHash?: T;
+  userAgent?: T;
+  deliveryStatus?: T;
+  bitrixStatus?: T;
+  telegramStatus?: T;
+  bitrixLeadId?: T;
+  telegramMessageId?: T;
+  telegramAttachmentDelivered?: T;
+  deliveryAttempts?: T;
+  lastDeliveryError?: T;
+  deliveredAt?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-files_select".
+ */
+export interface LeadFilesSelect<T extends boolean = true> {
+  originalName?: T;
+  submissionId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -729,6 +829,18 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDeliverLead".
+ */
+export interface TaskDeliverLead {
+  input: {
+    leadId: number;
+  };
+  output: {
+    delivered: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

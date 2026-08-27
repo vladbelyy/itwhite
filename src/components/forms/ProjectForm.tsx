@@ -58,6 +58,7 @@ export default function ProjectForm() {
   const [sessionId, setSessionId] = useState("pending");
   const [requestCode, setRequestCode] = useState("ITW-2026-0000");
   const formStarted = useRef(false);
+  const submissionId = useRef("");
 
   useEffect(() => {
     const storedDiagnosis = localStorage.getItem("itwhiteDiagnosis");
@@ -95,9 +96,11 @@ export default function ProjectForm() {
       }
     }
 
+    const nextSubmissionId = crypto.randomUUID();
     setOriginService(serviceFromSlug(serviceSlug));
     setSessionId(crypto.randomUUID());
-    setRequestCode(`ITW-2026-${Math.floor(1000 + Math.random() * 9000)}`);
+    setRequestCode(`ITW-${new Date().getUTCFullYear()}-${nextSubmissionId.slice(0, 8).toUpperCase()}`);
+    submissionId.current = nextSubmissionId;
   }, []);
 
   async function submit(event: { preventDefault(): void; currentTarget: HTMLFormElement }) {
@@ -108,6 +111,8 @@ export default function ProjectForm() {
     const data = new FormData(form);
     data.set("diagnosis", diagnosis);
     data.set("sessionId", sessionId === "pending" ? crypto.randomUUID() : sessionId);
+    if (!submissionId.current) submissionId.current = crypto.randomUUID();
+    data.set("submissionId", submissionId.current);
     data.set("requestCode", requestCode);
     data.set("originService", originService?.slug || "");
     data.set("originScenario", originScenario);
@@ -118,14 +123,17 @@ export default function ProjectForm() {
 
     try {
       const response = await fetch("/api/lead", { method: "POST", body: data });
-      const result = await response.json().catch(() => ({})) as { error?: string; warning?: string; deliveredChannels?: string[] };
+      const result = await response.json().catch(() => ({})) as { accepted?: boolean; error?: string; warning?: string; deliveredChannels?: string[] };
       if (!response.ok) throw new Error(result.error || "Не удалось передать заявку.");
       const partial = Boolean(result.warning);
       setState(partial ? "partial" : "sent");
-      setMessage(result.warning || `Заявка передана: ${(result.deliveredChannels || []).join(" + ") || "канал связи"}.`);
+      setMessage(result.warning || (result.accepted ? "Заявка сохранена. Мы свяжемся с вами по указанному контакту." : `Заявка передана: ${(result.deliveredChannels || []).join(" + ") || "канал связи"}.`));
       trackGoal("lead_success", { requestCode, originService: originService?.slug || "", degraded: partial, channels: result.deliveredChannels || [] });
       form.reset();
       setFileName("");
+      const nextSubmissionId = crypto.randomUUID();
+      submissionId.current = nextSubmissionId;
+      setRequestCode(`ITW-${new Date().getUTCFullYear()}-${nextSubmissionId.slice(0, 8).toUpperCase()}`);
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Не удалось отправить форму.");

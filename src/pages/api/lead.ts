@@ -1,11 +1,12 @@
 import type { APIRoute } from "astro";
+import { createHmac } from "node:crypto";
 
 const attempts = new Map<string, { count: number; resetAt: number }>();
 const jsonHeaders = { "content-type": "application/json; charset=utf-8" };
 const maxAttachmentSize = 5 * 1024 * 1024;
 const allowedAttachmentTypes = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp", "text/plain"]);
 const allowedOrigins = new Set(["https://itwhite.ru", "https://www.itwhite.ru"]);
-type Lead = { name: string; company: string; contact: string; site: string; systems: string; task: string; topics: string[]; diagnosis: string; sessionId: string; requestCode: string; pageUrl: string; landingPath: string; referrer: string; utm: string; createdAt: string; attachmentName: string; consentVersion: string; privacyVersion: string; consentAt: string; ip: string; userAgent: string };
+type Lead = { name: string; company: string; contact: string; site: string; systems: string; task: string; topics: string[]; diagnosis: string; sessionId: string; submissionId: string; requestCode: string; originService: string; originScenario: string; pageUrl: string; landingPath: string; referrer: string; utm: string; createdAt: string; attachmentName: string; consentVersion: string; privacyVersion: string; consentAt: string; ip: string; ipHash: string; userAgent: string };
 
 function response(body: Record<string, unknown>, status = 200) { return new Response(JSON.stringify(body), { status, headers: jsonHeaders }); }
 function tooManyRequests(ip: string) {
@@ -24,13 +25,61 @@ async function checkedFetch(url: string, init: RequestInit) {
   if (!result.ok || payload.ok === false || payload.error) throw new Error("Delivery provider rejected the request");
 }
 
+function hashIP(ip: string) {
+  const secret = env("LEAD_IP_HASH_SECRET");
+  return secret ? createHmac("sha256", secret).update(ip).digest("hex") : "";
+}
+
+function hasValidAttachmentSignature(type: string, bytes: Uint8Array) {
+  if (type === "application/pdf") return bytes.length >= 5 && Buffer.from(bytes.subarray(0, 5)).toString("ascii") === "%PDF-";
+  if (type === "image/jpeg") return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (type === "image/png") return bytes.length >= 8 && Buffer.from(bytes.subarray(0, 8)).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  if (type === "image/webp") return bytes.length >= 12 && Buffer.from(bytes.subarray(0, 4)).toString("ascii") === "RIFF" && Buffer.from(bytes.subarray(8, 12)).toString("ascii") === "WEBP";
+  if (type === "text/plain") return !bytes.subarray(0, Math.min(bytes.length, 8192)).includes(0);
+  return false;
+}
+
+async function storeLead(lead: Lead, attachment: File | null, attachmentBytes: Uint8Array | null) {
+  const ingestURL = env("LEAD_INGEST_URL");
+  const ingestSecret = env("LEAD_INGEST_SECRET");
+  if (!ingestURL || !ingestSecret) return null;
+
+  const parsedURL = new URL(ingestURL);
+  if (parsedURL.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(parsedURL.hostname)) {
+    throw new Error("Lead ingest must use a loopback HTTP endpoint");
+  }
+
+  const result = await fetch(parsedURL, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${ingestSecret}`,
+      "content-type": "application/json",
+      "x-idempotency-key": lead.submissionId,
+    },
+    body: JSON.stringify({
+      ...lead,
+      ip: undefined,
+      attachment: attachment && attachmentBytes ? {
+        data: Buffer.from(attachmentBytes).toString("base64"),
+        mimeType: attachment.type,
+        name: attachment.name,
+        size: attachment.size,
+      } : null,
+    }),
+    signal: AbortSignal.timeout(8_000),
+  });
+  const payload = await result.json().catch(() => ({})) as { accepted?: boolean; duplicate?: boolean };
+  if (!result.ok || !payload.accepted) throw new Error("Lead storage rejected the request");
+  return payload;
+}
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const origin = request.headers.get("origin");
   const fetchSite = request.headers.get("sec-fetch-site");
-  if ((origin && !allowedOrigins.has(origin)) || fetchSite === "cross-site") {
+  if (!origin || !allowedOrigins.has(origin) || fetchSite === "cross-site") {
     return response({ error: "Источник запроса не разрешён." }, 403);
   }
-  const ip = clientAddress || request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const ip = request.headers.get("x-real-ip")?.trim() || request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || clientAddress || "unknown";
   if (tooManyRequests(ip)) return response({ error: "Слишком много попыток. Подождите минуту и попробуйте снова." }, 429);
   const contentType = request.headers.get("content-type") || "";
   if (!contentType.includes("multipart/form-data") && !contentType.includes("application/x-www-form-urlencoded")) return response({ error: "Неподдерживаемый формат запроса." }, 415);
@@ -42,18 +91,34 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const fileEntry = form.get("attachment");
   const attachment = fileEntry instanceof File && fileEntry.size > 0 ? fileEntry : null;
   if (attachment && (attachment.size > maxAttachmentSize || !allowedAttachmentTypes.has(attachment.type))) return response({ error: "Файл должен быть PDF, TXT, PNG, JPG или WebP размером до 5 МБ." }, 400);
+  const attachmentBytes = attachment ? new Uint8Array(await attachment.arrayBuffer()) : null;
+  if (attachment && attachmentBytes && !hasValidAttachmentSignature(attachment.type, attachmentBytes)) return response({ error: "Содержимое файла не соответствует разрешённому формату." }, 400);
   const receivedAt = new Date().toISOString();
   const lead: Lead = {
     name: clean(form.get("name")), company: clean(form.get("company")), contact: clean(form.get("contact")), site: clean(form.get("site")),
     systems: clean(form.get("systems")), task: clean(form.get("task")), topics: form.getAll("topics").map(clean).filter(Boolean),
-    diagnosis: clean(form.get("diagnosis")), sessionId: clean(form.get("sessionId")), requestCode: clean(form.get("requestCode")),
+    diagnosis: clean(form.get("diagnosis")), sessionId: clean(form.get("sessionId")), submissionId: clean(form.get("submissionId")), requestCode: clean(form.get("requestCode")),
+    originService: clean(form.get("originService")), originScenario: clean(form.get("originScenario")),
     pageUrl: clean(form.get("pageUrl")), landingPath: clean(form.get("landingPath")), referrer: clean(form.get("referrer")), utm: clean(form.get("utm")),
     createdAt: receivedAt, attachmentName: attachment?.name ?? "",
     consentVersion: clean(form.get("consentVersion")), privacyVersion: clean(form.get("privacyVersion")), consentAt: receivedAt,
-    ip: ip.slice(0, 128), userAgent: (request.headers.get("user-agent") || "unknown").slice(0, 512)
+    ip: ip.slice(0, 128), ipHash: hashIP(ip), userAgent: (request.headers.get("user-agent") || "unknown").slice(0, 512)
   };
   if (!lead.name || !lead.contact || !lead.task) return response({ error: "Заполните имя, контакт и описание задачи." }, 400);
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(lead.submissionId)) return response({ error: "Не удалось определить идентификатор отправки. Обновите страницу и попробуйте снова." }, 400);
   if (lead.consentVersion !== "PD-CONSENT-2026-08-14-R4" || lead.privacyVersion !== "PRIVACY-2026-08-14-R5") return response({ error: "Не удалось подтвердить актуальную версию документов. Обновите страницу и попробуйте снова." }, 400);
+
+  const ingestConfigured = Boolean(env("LEAD_INGEST_URL") && env("LEAD_INGEST_SECRET") && env("LEAD_IP_HASH_SECRET"));
+  const allowLegacySync = !import.meta.env.PROD && env("LEAD_ALLOW_LEGACY_SYNC") === "true";
+  if (ingestConfigured) {
+    try {
+      const stored = await storeLead(lead, attachment, attachmentBytes);
+      return response({ ok: true, accepted: true, queued: true, duplicate: stored?.duplicate === true, requestCode: lead.requestCode }, stored?.duplicate ? 200 : 202);
+    } catch {
+      return response({ error: "Не удалось надёжно сохранить заявку. Попробуйте позже или напишите на info@itwhite.ru." }, 503);
+    }
+  }
+  if (!allowLegacySync) return response({ error: "Хранилище заявок временно недоступно. Напишите на info@itwhite.ru." }, 503);
 
   const hasBitrix = Boolean(env("BITRIX24_WEBHOOK_URL"));
   const hasTelegram = Boolean(env("TELEGRAM_BOT_TOKEN") && env("TELEGRAM_CHAT_ID"));

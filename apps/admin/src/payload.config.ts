@@ -6,11 +6,15 @@ import sharp from 'sharp'
 
 import { Cases } from './collections/Cases'
 import { Insights } from './collections/Insights'
+import { LeadFiles } from './collections/LeadFiles'
 import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Sources } from './collections/Sources'
 import { Users } from './collections/Users'
+import { hasRole } from './access/roles'
+import { leadIngestEndpoint } from './endpoints/leadIngest'
 import { restrictedEditor } from './fields/restrictedEditor'
+import { DeliverLead } from './jobs/DeliverLead'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -46,13 +50,25 @@ export default buildConfig({
       fields: 100,
     },
   },
-  collections: [Users, Leads, Media, Sources, Cases, Insights],
+  collections: [Users, Leads, LeadFiles, Media, Sources, Cases, Insights],
   cors: [adminOrigin],
   csrf: [adminOrigin],
   defaultDepth: 1,
   editor: restrictedEditor,
   graphQL: {
     disable: true,
+  },
+  endpoints: [leadIngestEndpoint],
+  jobs: {
+    access: {
+      cancel: ({ req }) => hasRole(req.user, ['owner', 'admin']),
+      queue: ({ req }) => hasRole(req.user, ['owner', 'admin']),
+      run: ({ req }) => hasRole(req.user, ['owner', 'admin']),
+    },
+    autoRun: process.env.LEAD_WORKER_ENABLED === 'true'
+      ? [{ cron: '*/10 * * * * *', limit: 1, queue: 'lead-delivery' }]
+      : [],
+    tasks: [DeliverLead],
   },
   maxDepth: 5,
   secret: requiredEnv('PAYLOAD_SECRET'),

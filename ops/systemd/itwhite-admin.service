@@ -9,6 +9,8 @@ User=itwhite-admin
 Group=itwhite-admin
 WorkingDirectory=/var/www/itwhite-admin/current/apps/admin
 EnvironmentFile=/etc/itwhite-admin.env
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=4323
 ExecStart=/usr/bin/node /var/www/itwhite-admin/current/apps/admin/server.js
 Restart=on-failure
 RestartSec=5
