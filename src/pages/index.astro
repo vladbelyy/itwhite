@@ -17,13 +17,13 @@ const homeDirections = [
   { code: "03", slug: "internal-tools", title: "Внутренние системы", text: "Создаём рабочие кабинеты и панели поверх существующих данных." },
   { code: "04", slug: "ai-automation", title: "Контролируемый AI", text: "Встраиваем модели туда, где результат можно проверить и остановить." },
   { code: "05", slug: "technical-consulting", title: "Технический консалтинг", text: "Проверяем архитектуру, код, инфраструктуру и риски до изменений." },
-  { code: "06", slug: "custom-product-development", title: "Заказная разработка", text: "Проектируем продукт вокруг процесса, ролей и критериев приёмки." }
+  { code: "06", slug: "custom-product-development", title: "Инструменты под процессы", text: "Проектируем специализированные решения вокруг процесса, ролей и критериев приёмки." }
 ];
 const secondaryProducts = products.filter((product) => product.id !== "crm");
 const stageTitles: Record<string, string> = {
   Diagnose: "Диагностика",
-  Launch: "Запуск",
-  Operate: "Сопровождение"
+  Launch: "Внедрение",
+  Operate: "Развитие"
 };
 const canonicalServicePages = servicePages.filter((page) => !redirectedServiceSlugs.has(page.slug));
 const homeUrl = "https://itwhite.ru/";
@@ -146,7 +146,7 @@ const schema = {
           <div class="hero__copy">
             <p class="section-kicker">Системы управления для бизнеса</p>
             <h1 id="hero-title">Бизнес не должен держаться на памяти сотрудников.</h1>
-            <p class="hero__lead">Находим разрывы между продажами, CRM, данными и командой. Затем создаём систему, которая замечает проблему и возвращает действие ответственному.</p>
+            <p class="hero__lead">Находим ручные процессы, потерянные данные и точки зависимости от сотрудников — затем собираем из них работающую цифровую систему.</p>
             <div class="hero__actions">
               <a class="button button--primary" href="/contact/?service=process-review" data-cursor="START">Разобрать процесс</a>
               <a class="hero__work-link" href="/work/" data-cursor="OPEN">Посмотреть рабочие контуры <span aria-hidden="true">↗</span></a>
@@ -223,7 +223,7 @@ const schema = {
       <section class="section section--ecosystem" data-status-section data-nav-current="systems">
         <div class="section-inner">
           <p class="section-kicker" data-reveal>Control contour</p>
-          <h2 class="section-title section-title--ecosystem" data-reveal>IT WHITE создаёт не отдельные боты. Мы строим контур управления.</h2>
+          <h2 class="section-title section-title--ecosystem" data-reveal>Не отдельные боты и интеграции. Собираем единый контур управления бизнесом.</h2>
           <p class="section-copy" data-reveal>Связываем обращения, коммуникации, CRM, автоматические проверки и аналитику так, чтобы проблема не терялась между системами.</p>
           <p class="section-copy section-copy--sharp" data-reveal>Система сама замечает, где процесс перестал работать, и возвращает проблему ответственному.</p>
           <figure class="editorial-visual editorial-visual--route" data-reveal>
@@ -245,14 +245,46 @@ const schema = {
         </div>
       </section>
 
+      <section id="case" class="section section--case section--case-priority" data-status-section>
+        <div class="section-inner">
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--case">Один рабочий кейс вместо обещаний.</h2>
+            <p>CRM Lead Control — внутренний production-контур, который проверяет лиды без ответственного или реакции и возвращает сигнал руководителю.</p>
+          </header>
+          <div class="case-brief">
+            <div class="case-brief__story" data-reveal>
+              <article><span>Было</span><b>Лид уже есть в CRM, но ответственный или реакция не зафиксированы.</b></article>
+              <article><span>Сделали</span><b>Подключили проверку ответственного, реакции и контекста обращения.</b></article>
+              <article><span>Стало</span><b>Руководитель получает сигнал в рабочем чате и сам принимает критическое решение.</b></article>
+            </div>
+            <article class="case-signal" data-reveal>
+              <span>Иллюстративный сигнал / не клиентская метрика</span>
+              <h3>Лид без реакции</h3>
+              <p><b>Источник</b><span>Bitrix24 / Avito</span></p>
+              <p><b>Риск</b><span>Ответственный не назначен</span></p>
+              <p><b>Действие</b><span>Проверка руководителя</span></p>
+            </article>
+          </div>
+          <div class="case-facts" data-reveal>
+            <span><b>3 недели</b> внедрение</span>
+            <span><b>Internal production</b> статус</span>
+            <span><b>Human decision</b> критические действия</span>
+          </div>
+          <div class="section-actions" data-reveal>
+            <a class="button button--primary" href="/work/">Смотреть внедрения</a>
+            <a class="text-link" href="/it-white-control/">Как устроен контроль <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+
       <section id="systems" class="section section--systems" data-status-section>
         <div class="section-inner">
-          <header class="mobile-section-head">
-            <h2 class="section-title section-title--systems">Системы, которые уже решают операционные задачи.</h2>
+          <header class="mobile-section-head" data-reveal>
+            <h2 class="section-title section-title--systems">Часть решений мы уже превратили в продукты.</h2>
             <p>Показываем статус и границы доступа прямо. Подробные интерфейсы вынесены в продуктовый раздел, а здесь — только назначение и рабочая логика.</p>
           </header>
 
-          <article class="flagship-brief">
+          <article class="flagship-brief" data-reveal>
             <div class="flagship-brief__copy">
               <span>Флагманский контур / Live private</span>
               <h3>IT WHITE Control</h3>
@@ -314,45 +346,11 @@ const schema = {
         </div>
       </section>
 
-      <section id="case" class="section section--case" data-status-section>
-        <div class="section-inner">
-          <header class="mobile-section-head" data-reveal>
-            <h2 class="section-title section-title--case">Один рабочий кейс вместо обещаний.</h2>
-            <p>CRM Lead Control — внутренний production-контур, который проверяет лиды без ответственного или реакции и возвращает сигнал руководителю.</p>
-          </header>
-          <div class="case-brief">
-            <div class="case-brief__story" data-reveal>
-              <article><span>До</span><b>Лид есть в CRM, но его никто не ведёт.</b></article>
-              <article><span>Проверка</span><b>Система сверяет ответственного, реакцию и контекст.</b></article>
-              <article><span>После</span><b>Сигнал приходит в рабочий чат, решение остаётся за человеком.</b></article>
-            </div>
-            <article class="case-signal" data-reveal>
-              <span>Иллюстративный сигнал / не клиентская метрика</span>
-              <h3>Лид без реакции</h3>
-              <p><b>Источник</b><span>Bitrix24 / Avito</span></p>
-              <p><b>Риск</b><span>Ответственный не назначен</span></p>
-              <p><b>Действие</b><span>Проверка руководителя</span></p>
-            </article>
-          </div>
-          <div class="case-facts" data-reveal>
-            <span><b>3 недели</b> внедрение</span>
-            <span><b>Internal production</b> статус</span>
-            <span><b>Human decision</b> критические действия</span>
-          </div>
-          <div class="section-actions" data-reveal>
-            <a class="button button--primary" href="/work/">Смотреть внедрения</a>
-            <a class="text-link" href="/it-white-control/">Как устроен контроль <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </section>
-
-      
-
       <section class="section section--case-library" data-status-section data-nav-current="case">
         <div class="section-inner">
           <header class="mobile-section-head" data-reveal>
-            <h2 class="section-title">50 карт процессов — с ограничениями, а не только с идеями.</h2>
-            <p>Редакционные исследования, не клиентские кейсы. В каждой карте: процесс, архитектура, KPI, роль человека и границы автоматизации.</p>
+            <h2 class="section-title">Не всё нужно автоматизировать. Мы знаем, что имеет смысл.</h2>
+            <p>50 редакционных карт процессов, не клиентские кейсы. В каждой: архитектура, KPI, роль человека и честные границы автоматизации.</p>
           </header>
           <div class="case-index-list">
             {caseStudies.slice(0, 3).map((study, index) => (
@@ -385,8 +383,8 @@ const schema = {
       <section id="team" class="section section--team" data-status-section>
         <div class="section-inner">
           <header class="mobile-section-head" data-reveal>
-            <h2 class="section-title section-title--team">Два партнёра. Отвечают вместе.</h2>
-            <p>Проект не передаётся от продавца разработчику: бизнес-логика и техническое исполнение остаются в одном контуре от первого разговора до внедрения.</p>
+            <h2 class="section-title section-title--team">Проект ведут партнёры, а не аккаунт-менеджеры.</h2>
+            <p>Архитектуру, внедрение и работу с командой клиента не передаём по цепочке: бизнес-логика и техническое исполнение остаются в одном контуре.</p>
           </header>
           <div class="partner-list" aria-label="Партнёры IT WHITE">
             <article data-reveal>
@@ -411,7 +409,7 @@ const schema = {
         <div class="section-inner">
           <header class="mobile-section-head" data-reveal>
             <h2 class="section-title section-title--diagnostic">Проверить процесс до разговора.</h2>
-            <p>Семь вопросов покажут, где работа зависит от ручного контроля. Результат остаётся в браузере, пока вы сами не приложите его к обращению.</p>
+            <p>Семь вопросов покажут, где в процессе остались ручная работа, потери данных и потенциал автоматизации. Результат остаётся в браузере, пока вы сами не приложите его к обращению.</p>
           </header>
           <div class="diagnostic-brief" data-reveal>
             <div><span>7 вопросов / около 3 минут</span><b>Самопроверка без регистрации и автоматической отправки данных.</b></div>
@@ -440,6 +438,8 @@ const schema = {
         </div>
       </section>
     </main>
+
+    <a class="mobile-sticky-cta" href="/contact/?service=process-review" data-mobile-sticky-cta>Разобрать процесс <span aria-hidden="true">→</span></a>
 
     <footer class="site-footer" aria-label="Индекс сайта IT WHITE">
       <div class="site-footer__inner">
@@ -479,5 +479,63 @@ const schema = {
         <span>STATUS: ACCEPTING PROJECTS</span>
       </div>
     </footer>
+    <script>
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+
+      if (!prefersReducedMotion.matches && revealItems.length) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const item = entry.target as HTMLElement;
+            item.classList.add("is-visible");
+            revealObserver.unobserve(item);
+          });
+        }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+
+        revealItems.forEach((item) => {
+          const section = item.closest("section");
+          const sectionItems = section ? Array.from(section.querySelectorAll<HTMLElement>("[data-reveal]")) : [item];
+          const localIndex = Math.max(0, sectionItems.indexOf(item));
+          item.style.setProperty("--reveal-delay", `${Math.min(localIndex, 3) * 45}ms`);
+
+          if (item.getBoundingClientRect().top <= window.innerHeight * 0.92) {
+            item.classList.add("is-visible");
+            return;
+          }
+
+          item.classList.add("is-reveal-pending");
+          revealObserver.observe(item);
+        });
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      const mobileStickyCta = document.querySelector<HTMLElement>("[data-mobile-sticky-cta]");
+      const contactSection = document.querySelector<HTMLElement>("#contact");
+      const mobileViewport = window.matchMedia("(max-width: 900px)");
+
+      if (mobileStickyCta && contactSection) {
+        let contactStart = 0;
+        const measureContactStart = () => {
+          contactStart = contactSection.getBoundingClientRect().top + window.scrollY;
+        };
+        const syncMobileStickyCta = () => {
+          const hasScrolled = window.scrollY > Math.max(180, window.innerHeight * 0.2);
+          const isBeforeContact = window.scrollY + window.innerHeight * 0.82 < contactStart;
+          mobileStickyCta.classList.toggle("is-visible", mobileViewport.matches && hasScrolled && isBeforeContact);
+        };
+
+        const handleResize = () => {
+          measureContactStart();
+          syncMobileStickyCta();
+        };
+
+        measureContactStart();
+        window.addEventListener("scroll", syncMobileStickyCta, { passive: true });
+        window.addEventListener("resize", handleResize, { passive: true });
+        syncMobileStickyCta();
+      }
+    </script>
   </div>
 </BaseLayout>

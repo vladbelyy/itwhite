@@ -114,7 +114,8 @@ const contactHref = `/contact/?service=${encodeURIComponent(contactService)}`;
       </details>
 
       <a href="/work/" aria-current={currentPath === "/work/" ? "page" : undefined}><small>04</small>Внедрения</a>
-      <a href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}><small>05</small>Материалы</a>
+      <a href="/cases/" aria-current={currentPath === "/cases/" || currentPath.startsWith("/cases/") ? "page" : undefined}><small>05</small>Карты процессов</a>
+      <a href="/insights/" aria-current={currentPath === "/insights/" ? "page" : undefined}><small>06</small>Материалы</a>
       <a href="/formats/" aria-current={isCurrent("/formats/") ? "page" : undefined}>Форматы работы</a>
       <a href="/about/" aria-current={currentPath === "/about/" ? "page" : undefined}>О студии</a>
       <a class="mobile-menu__cta" href={contactHref} aria-current={currentPath === "/contact/" ? "page" : undefined}><span>Разобрать процесс</span><small>Расскажите, где теряется контроль →</small></a>
