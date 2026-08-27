@@ -34,6 +34,8 @@ The edge also blocks `/api/lead-ingest` and Payload job-runner endpoints. The pu
 
 Set `LEAD_WORKER_ENABLED=true` on exactly one long-running Payload process. The runner processes only the `lead-delivery` queue with limit 1. Provider credentials belong to that process and must be removed from the public PM2 environment after cutover.
 
+The Astro PM2 process starts through `/usr/local/sbin/itwhite-landing-start`, sourced from `ops/pm2/itwhite-landing-start.sh`. The wrapper clears all provider variables, reads only the loopback intake settings from root-only `/etc/itwhite-landing.env`, and starts the active `current` release. Start or recreate that PM2 app with a minimal client environment so neither provider nor intake secrets are serialized into the PM2 dump.
+
 Keep `LEAD_ATTACHMENT_DELIVERY_ENABLED=false` until a production malware scanner is installed. Files are stored in the protected lead-files collection and forced to download as attachments; the Telegram notification only reports that a file is waiting in the admin workspace.
 
 ## Lead intake release gate
