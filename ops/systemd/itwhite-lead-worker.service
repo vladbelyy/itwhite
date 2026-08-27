@@ -1,0 +1,42 @@
+[Unit]
+Description=IT WHITE durable lead delivery worker
+After=network-online.target postgresql.service itwhite-admin.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=itwhite-admin
+Group=itwhite-admin
+WorkingDirectory=/var/www/itwhite-repo/apps/admin
+EnvironmentFile=/etc/itwhite-admin.env
+Environment=NODE_ENV=production
+Environment=HOME=/var/lib/itwhite-admin
+ExecStart=/usr/bin/pnpm payload jobs:run --cron "*/10 * * * * *" --queue lead-delivery --limit 1
+Restart=always
+RestartSec=5
+TimeoutStartSec=90
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0027
+
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=full
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+MemoryMax=768M
+TasksMax=192
+
+[Install]
+WantedBy=multi-user.target

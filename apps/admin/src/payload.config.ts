@@ -65,9 +65,9 @@ export default buildConfig({
       queue: ({ req }) => hasRole(req.user, ['owner', 'admin']),
       run: ({ req }) => hasRole(req.user, ['owner', 'admin']),
     },
-    autoRun: process.env.LEAD_WORKER_ENABLED === 'true'
-      ? [{ cron: '*/10 * * * * *', limit: 1, queue: 'lead-delivery' }]
-      : [],
+    autoRun: [],
+    deleteJobOnComplete: true,
+    processingOrder: { queues: { 'lead-delivery': 'createdAt' } },
     tasks: [DeliverLead],
   },
   maxDepth: 5,

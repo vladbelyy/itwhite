@@ -19,12 +19,13 @@ The generated bootstrap credentials are stored only in `/root/itwhite-admin-boot
 1. Install dependencies with the committed lockfile.
 2. Generate types, run typecheck and build both Astro and Admin.
 3. Back up the admin database and active Nginx vhost.
-4. Run committed Payload migrations.
+4. Stop `itwhite-lead-worker.service`, then run committed Payload migrations.
 5. Build a new standalone release without changing `current`.
 6. Smoke-test the release on a private alternate port.
 7. Seed the first owner server-side if and only if no users exist.
 8. Atomically switch `current`, restart the service, then enable the proxy vhost.
-9. Verify health, Basic Auth, Payload login, unauthorized REST denial, TLS and noindex headers.
+9. Restart the worker only after the new admin health check passes.
+10. Verify health, Basic Auth, Payload login, unauthorized REST denial, TLS and noindex headers.
 
 Do not use Postgres schema push in production. Do not expose Payload's first-user page before the server-side seed succeeds. IndexNow is sent only after a public Astro release, never directly from a CMS draft or publish action.
 
@@ -32,7 +33,7 @@ The edge blocks both first-user registration and password-reset routes. Keep pas
 
 The edge also blocks `/api/lead-ingest` and Payload job-runner endpoints. The public Astro process calls lead intake only over `127.0.0.1:4323` with `LEAD_INGEST_SECRET`. A successful public response means the lead and its delivery job have committed to PostgreSQL; it does not mean Bitrix24 or Telegram has already responded.
 
-Set `LEAD_WORKER_ENABLED=true` on exactly one long-running Payload process. The runner processes only the `lead-delivery` queue with limit 1. Provider credentials belong to that process and must be removed from the public PM2 environment after cutover.
+Enable exactly one `itwhite-lead-worker.service`. It uses Payload's dedicated `jobs:run` bin runner every ten seconds, processes only the FIFO `lead-delivery` queue with limit 1, and deletes a job only after successful completion. The Next/Payload web process deliberately has no `autoRun`, preventing two runners from racing. Provider credentials belong to the admin and worker environment and must be absent from the public PM2 process.
 
 The Astro PM2 process starts through `/usr/local/sbin/itwhite-landing-start`, sourced from `ops/pm2/itwhite-landing-start.sh`. The wrapper clears all provider variables, reads only the loopback intake settings from root-only `/etc/itwhite-landing.env`, and starts the active `current` release. Start or recreate that PM2 app with a minimal client environment so neither provider nor intake secrets are serialized into the PM2 dump.
 
@@ -44,7 +45,7 @@ Keep `LEAD_ATTACHMENT_DELIVERY_ENABLED=false` until a production malware scanner
 2. Verify an authenticated loopback intake creates exactly one lead and one job.
 3. Repeat the same `submissionId` and confirm no second lead or job appears.
 4. Verify public REST create/read remains denied without a Payload session.
-5. Enable the single worker and run one labelled end-to-end test.
+5. Enable the single systemd worker and run one labelled end-to-end test.
 6. Confirm channel IDs and delivery status were persisted before removing the test lead.
 
 Never fall back to provider delivery without storage in production. If PostgreSQL or intake is unavailable, return `503` and show `info@itwhite.ru`.

@@ -11,6 +11,9 @@ set -a
 source "$environment_file"
 set +a
 
+export HOST=127.0.0.1
+export PORT=4322
+
 test -n "${LEAD_INGEST_URL:-}"
 test -n "${LEAD_INGEST_SECRET:-}"
 test -n "${LEAD_IP_HASH_SECRET:-}"
