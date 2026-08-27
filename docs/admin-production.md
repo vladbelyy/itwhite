@@ -56,7 +56,7 @@ Install `ops/backup/itwhite-admin-backup.sh` as `/usr/local/sbin/itwhite-admin-b
 
 Before every schema migration, run the backup service manually and validate `SHA256SUMS`, `pg_restore --list`, and both media archives. Test a restore in a separate temporary database. Once real leads exist, never overwrite the live database with an old full dump; restore separately and reconcile or fix forward.
 
-The local backup briefly stops the admin service by default so the database dump and protected file archives describe one quiescent application state. During that short window public lead intake fails closed with `503`; the form preserves its `submissionId` for a safe retry. Set `ITWHITE_ADMIN_BACKUP_QUIESCE=false` only for an explicitly coordinated snapshot-capable storage setup.
+The local backup briefly stops both the lead worker and admin service by default so the database dump and protected file archives describe one quiescent application state. Admin restarts before the worker. During that short window public lead intake fails closed with `503`; the form preserves its `submissionId` for a safe retry. Set `ITWHITE_ADMIN_BACKUP_QUIESCE=false` only for an explicitly coordinated snapshot-capable storage setup.
 
 The durable-lead migration is deliberately fix-forward only: its `down` function refuses to remove lead, file, or delivery history. Application rollback remains possible because the schema change is additive. Database recovery must use an isolated restore followed by a reviewed switchover.
 

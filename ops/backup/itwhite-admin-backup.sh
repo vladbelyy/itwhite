@@ -10,6 +10,7 @@ timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 destination="${backup_root}/${timestamp}"
 temporary="${backup_root}/.partial-${timestamp}"
 admin_was_active=false
+worker_was_active=false
 
 test -r "$environment_file"
 install -d -m 0700 "$backup_root"
@@ -20,12 +21,15 @@ cleanup_partial() {
     find "$temporary" -type f -delete
     find "$temporary" -depth -type d -empty -delete
   fi
-  if test "$admin_was_active" = true; then
-    systemctl start itwhite-admin.service
-  fi
+  if test "$admin_was_active" = true; then systemctl start itwhite-admin.service; fi
+  if test "$worker_was_active" = true; then systemctl start itwhite-lead-worker.service; fi
 }
 trap cleanup_partial EXIT
 
+if test "$quiesce_admin" = true && systemctl is-active --quiet itwhite-lead-worker.service; then
+  systemctl stop itwhite-lead-worker.service
+  worker_was_active=true
+fi
 if test "$quiesce_admin" = true && systemctl is-active --quiet itwhite-admin.service; then
   systemctl stop itwhite-admin.service
   admin_was_active=true
@@ -73,6 +77,10 @@ mv "$temporary" "$destination"
 if test "$admin_was_active" = true; then
   systemctl start itwhite-admin.service
   admin_was_active=false
+fi
+if test "$worker_was_active" = true; then
+  systemctl start itwhite-lead-worker.service
+  worker_was_active=false
 fi
 trap - EXIT
 
